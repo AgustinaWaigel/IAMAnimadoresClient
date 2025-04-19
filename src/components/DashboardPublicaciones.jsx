@@ -50,6 +50,7 @@ export default function DashboardPublicaciones() {
           Authorization: `Bearer ${user?.token}`,
         }
         ,
+        credentials: 'include',
         body: formData,
       });
 
@@ -76,6 +77,7 @@ export default function DashboardPublicaciones() {
           Authorization: `Bearer ${user?.token}`,
         }
         ,
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -98,6 +100,7 @@ export default function DashboardPublicaciones() {
           Authorization: `Bearer ${user?.token}`,
         }
         ,
+        credentials: 'include',
         body: JSON.stringify({ contenido: newContenido }),
       });
 

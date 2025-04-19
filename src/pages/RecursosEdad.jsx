@@ -68,6 +68,7 @@ export default function RecursosEdad() {
           },
 
           body: formData,
+          credentials: 'include', // 👈 muy importante para cookies
         }
       );
 
@@ -103,6 +104,7 @@ export default function RecursosEdad() {
           headers: {
             Authorization: `Bearer ${user?.token}`, // 👈 Usamos user.token en vez de localStorage
           },
+          credentials: 'include', // 👈 muy importante para cookies
         }
       );
 

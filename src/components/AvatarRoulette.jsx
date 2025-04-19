@@ -54,6 +54,7 @@ export default function AvatarRoulette({ onSelect }) {
           Authorization: `Bearer ${user?.token}`,
 
         },
+        credentials: 'include',
         body: JSON.stringify({
           avatarUrl: avatar.src,
           avatarDesc: avatar.desc,

@@ -14,6 +14,7 @@ export default function AdminPanel() {
           headers: {
             Authorization: `Bearer ${user?.token}`,  // 👈 ESTA ES LA FORMA CORRECTA
           },
+          credentials: 'include',
         });
         const data = await res.json();
         setUsuarios(data);
@@ -36,6 +37,7 @@ export default function AdminPanel() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user?.token}`, // 👈 ESTA ES LA CORRECTA
         },
+        credentials: 'include',
         body: JSON.stringify({ rol: nuevoRol }),
       });
       

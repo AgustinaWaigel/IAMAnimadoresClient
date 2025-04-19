@@ -33,6 +33,7 @@ export default function ModalNoticia({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: formData,
+        credentials: 'include',
       });
 
       const data = await res.json();

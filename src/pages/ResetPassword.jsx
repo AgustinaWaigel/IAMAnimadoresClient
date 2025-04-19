@@ -24,6 +24,7 @@ export default function ResetPassword() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nuevaPassword }),
+  
       });
 
       const data = await res.json();

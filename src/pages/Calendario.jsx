@@ -71,7 +71,9 @@ export default function Calendario() {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
+          credentials: 'include',
         },
+        credentials: 'include',
         body: JSON.stringify(evento),
       });
 
@@ -112,6 +114,7 @@ export default function Calendario() {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
+          credentials: 'include',
         }
       );
 

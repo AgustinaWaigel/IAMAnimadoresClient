@@ -35,6 +35,7 @@ export default function Insertar({ isAdmin = false, area = "comunicacion", onNue
           Authorization: `Bearer ${user?.token}`,
         },
         body: form,
+        credentials: 'include',
       });
 
       const data = await res.json();

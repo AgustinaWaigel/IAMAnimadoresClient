@@ -38,6 +38,7 @@ export default function Profile() {
         headers: {
           'Content-Type': 'application/json', // 👈 muy importante para body JSON
           Authorization: `Bearer ${user?.token}`,
+          credentials: 'include',
         },
         body: JSON.stringify({
           avatarUrl: finalAvatar.src,

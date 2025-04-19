@@ -20,6 +20,7 @@ export default function ModalPublicacion({ post, onClose, onUpdate, onDelete }) 
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
+        credentials: 'include',
         body: JSON.stringify({ contenido }), // <<< ahora es JSON
       });
   

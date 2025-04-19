@@ -39,6 +39,7 @@ export default function Comunicacion() {
       const res = await fetch(api(`/posts/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user?.token}` },
+      credentials: 'include',
       });
       const data = await res.json();
       if (data.success) {
