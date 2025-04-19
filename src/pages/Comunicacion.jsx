@@ -51,7 +51,7 @@ export default function Comunicacion() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto py-1 p-6 space-y-8 bg-gradient-to-b from-white to-blue-100 shadow-lg ">
+    <div className="max-w-6xl mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-blue-100 shadow-lg ">
       <button
         onClick={() => navigate("/areas")}
         className="text-blue-600 hover:text-blue-800 font-semibold text-sm mb-6 flex items-center gap-2"
