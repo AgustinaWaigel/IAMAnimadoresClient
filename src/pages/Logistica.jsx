@@ -8,29 +8,29 @@ import { useNavigate } from "react-router-dom";
 
 export default function Logistica() {
   const { user } = useAuth();
-  const [comunicados, setComunicados] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const navigate = useNavigate();
 
-  const cargarComunicados = async () => {
+  const cargarPosts = async () => {
     try {
       const res = await fetch(api("/posts?area=logistica"));
       const data = await res.json();
-      setComunicados(data);
+      setPosts(data);
     } catch (err) {
-      console.error("❌ Error al cargar comunicados:", err);
+      console.error("❌ Error al cargar logística:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    cargarComunicados();
+    cargarPosts();
   }, []);
 
   const handleNuevoPost = (nuevoPost) => {
-    setComunicados((prev) => [nuevoPost, ...prev]);
+    setPosts((prev) => [nuevoPost, ...prev]);
     setMostrarFormulario(false);
   };
 
@@ -39,11 +39,11 @@ export default function Logistica() {
       const res = await fetch(api(`/posts/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user?.token}` },
-      credentials: 'include',
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
-        setComunicados((prev) => prev.filter((c) => c._id !== id));
+        setPosts((prev) => prev.filter((p) => p._id !== id));
       }
     } catch (err) {
       console.error("❌ Error al eliminar:", err);
@@ -51,8 +51,7 @@ export default function Logistica() {
   };
 
   return (
-  
-    <div className="min-h-screen flex flex-col py-10 bg-gradient-to-b from-slate-50 to-red-100 max-w-6xl mx-auto p-6 space-y-8">
+    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-red-100 shadow-lg min-h-screen flex flex-col">
       <button
         onClick={() => navigate("/areas")}
         className="text-red-600 hover:text-red-800 font-semibold text-sm mb-6 flex items-center gap-2"
@@ -64,7 +63,7 @@ export default function Logistica() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="font-mifuentepersonalizada text-7xl font-extrabold text-red-600 text-center drop-shadow-lg"
+        className="font-extrabold text-red-600 text-center drop-shadow-lg font-mifuentepersonalizada text-7xl"
       >
         Área de Logística
       </motion.h1>
@@ -75,8 +74,7 @@ export default function Logistica() {
         transition={{ delay: 0.4 }}
         className="text-gray-700 text-center text-lg max-w-2xl mx-auto"
       >
-        Encontrá aquí los comunicados, imágenes y archivos importantes de la
-        IAM. 📄✨
+        Encontrá aquí los recursos, imágenes y archivos importantes de la IAM. 📄✨
       </motion.p>
 
       {user?.rol === "admin" && (
@@ -91,7 +89,7 @@ export default function Logistica() {
                 : "bg-red-500 hover:bg-red-600 text-white"
             }`}
           >
-            {mostrarFormulario ? " Cancelar subida" : " Subir comunicado"}
+            {mostrarFormulario ? "Cancelar subida" : "Subir recurso"}
           </motion.button>
 
           <AnimatePresence>
@@ -112,43 +110,30 @@ export default function Logistica() {
       <hr className="border-gray-300" />
 
       <h2 className="text-2xl font-bold text-gray-800 text-center">
-        📂 Archivos subidos
+        📂 Recursos subidos
       </h2>
 
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-red-500"></div>
         </div>
-      ) : comunicados.length === 0 ? (
+      ) : posts.length === 0 ? (
         <p className="text-center text-gray-400 mt-6">
-          Todavía no hay comunicados. 📭
+          Todavía no hay recursos subidos. 📭
         </p>
       ) : (
-        <motion.ul
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
+        <motion.div
+          className="columns-1 sm:columns-2 md:columns-3 gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          {comunicados.map((post) => (
-            <motion.li
-              key={post._id}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-            >
+          {posts.map((post) => (
+            <div key={post._id} className="mb-4 break-inside-avoid">
               <PostCard post={post} onDelete={handleDelete} />
-            </motion.li>
+            </div>
           ))}
-        </motion.ul>
+        </motion.div>
       )}
     </div>
   );
