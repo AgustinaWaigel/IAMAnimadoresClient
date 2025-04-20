@@ -3,15 +3,25 @@ import { motion } from "framer-motion"; // ✨ Para animaciones suaves
 
 const Inicio = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center  text-center px-6 bg-gradient-to-b from-white to-yellow-100">
-      <div className="bg-yellow-100 py-10 h-screen w-screen flex items-center justify-center relative overflow-hidden">
-      <motion.h1
-        className="text-4xl md:text-6xl font-extrabold mb-6 text-yellow-400 py-10"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        "Misioneros de esperanza, entre los pueblos"      </motion.h1>
+    <div className="min-h-screen pb-10 flex flex-col items-center  text-center px-6 bg-gradient-to-b from-white to-yellow-100">
+      <div className="bg-gradient-to-tr from-amber-200 to-slate-10 h-screen w-screen flex flex-col items-center justify-center relative overflow-hidden">
+        <motion.h1
+          className="text-4xl md:text-6xl font-extrabold text-yellow-400 mb-6 text-center px-4"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          "Misioneros de esperanza, entre los pueblos"
+        </motion.h1>
+
+        <motion.img
+          src="/Logo.png"
+          alt="Niña misionera"
+          className="w-72 md:w-96"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        />
       </div>
       <motion.h1
         className="text-4xl md:text-6xl font-extrabold mb-6 text-yellow-400 px-10 py-10"
@@ -28,7 +38,8 @@ const Inicio = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8 }}
       >
-        Te acompañamos en tu misión de animar, organizar y compartir recursos para crecer en comunidad. 💡✨
+        Te acompañamos en tu misión de animar, organizar y compartir recursos
+        para crecer en comunidad. 💡✨
       </motion.p>
 
       <motion.img

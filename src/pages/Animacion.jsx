@@ -51,7 +51,7 @@ export default function Animacion() {
   };
 
   return (
-    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-green-100 shadow-lg">
+    <div className="min-h-screen mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-green-100 shadow-lg">
       <button
         onClick={() => navigate("/areas")}
         className="text-green-600 hover:text-green-800 font-semibold text-sm mb-6 flex items-center gap-2"
@@ -63,7 +63,7 @@ export default function Animacion() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="font-extrabold text-green-500 text-center drop-shadow-lg font-mifuentepersonalizada text-7xl"
+        className="font-extrabold text-green-500 text-center drop-shadow-lg font-mifuentepersonalizada text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
       >
         Área de Animación
       </motion.h1>

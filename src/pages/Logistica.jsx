@@ -63,7 +63,7 @@ export default function Logistica() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="font-extrabold text-red-600 text-center drop-shadow-lg font-mifuentepersonalizada text-7xl"
+        className="font-extrabold text-red-500 text-center drop-shadow-lg font-mifuentepersonalizada text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
       >
         Área de Logística
       </motion.h1>

@@ -51,10 +51,10 @@ export default function Espiritualidad() {
   };
 
   return (
-    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-slate-100 shadow-lg">
+    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-slate-100 shadow-lg min-h-screen">
       <button
         onClick={() => navigate("/areas")}
-        className="text-blue-600 hover:text-blue-800 font-semibold text-sm mb-6 flex items-center gap-2"
+        className="text-slate-400 hover:text-slate-600 font-semibold text-sm mb-6 flex items-center gap-2 "
       >
         Volver a Áreas
       </button>
@@ -63,7 +63,7 @@ export default function Espiritualidad() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="font-extrabold text-slate-400 text-center drop-shadow-lg font-mifuentepersonalizada text-7xl"
+        className="font-extrabold text-slate-400 text-center drop-shadow-lg font-mifuentepersonalizada text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
       >
         Área de Espiritualidad
       </motion.h1>

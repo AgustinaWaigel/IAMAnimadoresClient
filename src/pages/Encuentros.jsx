@@ -17,7 +17,7 @@ export default function Recursos() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        ✨ Encuentros y Recursos
+      Encuentros y Recursos
       </motion.h1>
 
       <motion.p 
