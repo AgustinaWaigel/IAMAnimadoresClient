@@ -90,18 +90,18 @@ export default function App() {
       </main>
 
       <footer className="mt-auto w-full py-4 text-center text-sm text-gray-500 border-t">
-        <p>© {new Date().getFullYear()} MiApp para Animadores</p>
-        <p className="text-xs mt-1">Desarrollado con ❤️ por el equipo</p>
+        <p>© {new Date().getFullYear()} App para Animadores</p>
+        <p className="text-xs mt-1">Siempre hagamos todo con ❤️</p>
         <div className="flex justify-center gap-4 mt-2 text-blue-600">
-          <a href="mailto:contacto@miapp.com" className="hover:underline">
-            Contacto
+          <a href="https://www.youtube.com/channel/UCShR66tuvm-N-I5ZUZ6Oo6Q" className="hover:underline">
+            Youtube
           </a>
           <a
-            href="https://github.com/miproyecto"
+            href="https://www.instagram.com/iamarqparana/?hl=es"
             target="_blank"
             className="hover:underline"
           >
-            GitHub
+            Instagram
           </a>
         </div>
       </footer>
