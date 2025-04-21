@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
+import { FileText, ImageIcon } from "lucide-react";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -14,7 +15,7 @@ export default function Noticias() {
   const [noticiaSeleccionada, setNoticiaSeleccionada] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+  const [tipoArchivoForm, setTipoArchivoForm] = useState("texto"); // 👈
 
   const cargarNoticias = async () => {
     try {
@@ -38,6 +39,7 @@ export default function Noticias() {
     formData.append("titulo", titulo);
     formData.append("tipo", tipo);
     formData.append("contenido", contenido);
+    formData.append("tipoArchivo", tipoArchivoForm); // 👈 falta esto
     if (archivo) formData.append("archivo", archivo);
 
     try {
@@ -45,7 +47,7 @@ export default function Noticias() {
         method: "POST",
         headers: { Authorization: `Bearer ${user?.token}` },
         body: formData,
-        credentials: 'include',
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
@@ -67,7 +69,7 @@ export default function Noticias() {
       const res = await fetch(api(`/noticias/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user?.token}` },
-      credentials: 'include',
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {
@@ -141,11 +143,29 @@ export default function Noticias() {
                   <option value="noticia">Noticia</option>
                   <option value="recurso">Recurso</option>
                 </select>
-                <input
-                  type="file"
-                  onChange={(e) => setArchivo(e.target.files[0])}
-                  className="text-sm"
-                />
+
+                <select
+                  value={tipoArchivoForm}
+                  onChange={(e) => setTipoArchivoForm(e.target.value)}
+                  className="w-full border rounded p-2"
+                >
+                  <option value="texto">Solo texto</option>
+                  <option value="imagen">Imagen (jpg, png, etc)</option>
+                  <option value="pdf">PDF</option>
+                  <option value="documento">
+                    Documento Word (.doc, .docx)
+                  </option>
+                </select>
+
+                {tipoArchivoForm !== "texto" && (
+                  <input
+                    type="file"
+                    onChange={(e) => setArchivo(e.target.files[0])}
+                    className="text-sm"
+                    required
+                  />
+                )}
+
                 <button className="bg-green-400 hover:bg-green-500 text-white px-6 py-2 rounded w-full transition">
                   Publicar
                 </button>
@@ -214,52 +234,80 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
 }
 
 function NoticiaCard({ noticia, onClick }) {
-  const esImagen = noticia.archivoUrl?.match(/\.(jpg|jpeg|png|gif)$/i);
-  const esPDF = noticia.archivoUrl?.match(/\.pdf$/i);
-  const esLink = typeof noticia.contenido === "string" && noticia.contenido.startsWith("http");  
-  
+  const esImagen = noticia.tipoArchivo === "imagen";
+  const esArchivo =
+    noticia.tipoArchivo === "pdf" || noticia.tipoArchivo === "documento";
+
   return (
-    <div
+    <motion.div
       onClick={onClick}
-      className="cursor-pointer bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition transform hover:scale-105 duration-300"
+      whileHover={{ scale: 1.03 }}
+      className="cursor-pointer bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition transform duration-300"
     >
-      {esImagen && (
+      {/* Imagen arriba si es una imagen */}
+      {esImagen && noticia.archivoUrl && (
         <img
           src={noticia.archivoUrl}
-          alt="Noticia"
+          alt="Vista previa"
           className="w-full h-48 object-cover"
         />
       )}
 
-      <div className="p-4 space-y-2 flex flex-col flex-grow">
-        <h3 className="font-bold text-yellow-500 text-lg">{noticia.titulo}</h3>
+      {/* Contenido */}
+      <div className="p-4 flex flex-col flex-grow space-y-3">
+        {/* Título */}
+        <div className="flex justify-between items-center">
+          <h3 className="font-bold text-yellow-500 text-lg line-clamp-2">
+            {noticia.titulo}
+          </h3>
 
-        {!esLink && noticia.contenido && (
+          {/* Tipo de archivo */}
+          <span
+            className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
+              esImagen
+                ? "bg-green-100 text-green-700"
+                : esArchivo
+                ? "bg-red-100 text-red-700"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {esImagen ? (
+              <>
+                <ImageIcon size={14} /> Imagen
+              </>
+            ) : esArchivo ? (
+              <>
+                <FileText size={14} /> Archivo
+              </>
+            ) : null}
+          </span>
+        </div>
+
+        {/* Contenido breve */}
+        {noticia.contenido && (
           <p className="text-gray-600 text-sm line-clamp-3">
             {noticia.contenido}
           </p>
         )}
 
-        {esLink && (
-          <a
-            href={noticia.contenido}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()} // que no abra modal
-            className="text-blue-600 hover:underline text-sm"
+        {/* Si es archivo, mostrar botón */}
+        {esArchivo && noticia.archivoUrl && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(noticia.archivoUrl, "_blank");
+            }}
+            className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 rounded-lg mt-2"
           >
-            🔗 Ver enlace
-          </a>
+            📄 Ver Documento
+          </button>
         )}
 
-        {esPDF && (
-          <span className="text-blue-600 text-xs">📄 Documento PDF</span>
-        )}
-
-        <p className="text-xs text-gray-400 mt-auto">
+        {/* Footer */}
+        <div className="text-xs text-gray-400 mt-auto pt-2">
           Publicado el {new Date(noticia.createdAt).toLocaleDateString()}
-        </p>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

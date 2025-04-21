@@ -196,7 +196,7 @@ export default function Escuelaconjesus() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="max-w-6xl mx-auto p-8 space-y-12 bg-gradient-to-b from-white via-yellow-50 to-yellow-200 shadow-lg mt-8"
+      className=" mx-auto p-8 space-y-12 bg-gradient-to-b from-white via-yellow-50 to-yellow-200 shadow-lg mt-8"
     >
       <motion.h1
         initial={{ y: -20, opacity: 0 }}
@@ -234,7 +234,7 @@ export default function Escuelaconjesus() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="mt-4 text-gray-700 text-[17px] leading-relaxed whitespace-pre-line"
+              className="mt-4 text-gray-700 text-[17px] leading-relaxed"
             >
               {contenido}
             </motion.p>
