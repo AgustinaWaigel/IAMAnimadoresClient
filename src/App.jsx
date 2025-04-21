@@ -44,7 +44,7 @@ export default function App() {
     location.pathname === "/login" || location.pathname === "/register";
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-white font-cute text-gray-700">
       <Navbar />
 
       <main className="flex-grow">

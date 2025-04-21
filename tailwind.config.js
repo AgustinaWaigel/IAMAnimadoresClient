@@ -3,14 +3,20 @@ export default {
     "./index.html",
     "./src/**/*.{js,jsx}",
   ],
-  theme: {
-    extend: {},
-  },
+
+  
   plugins: [],
   theme: {
     extend: {
+      colors: {
+        azul: "#5EC2D8",
+        verde: "#8FD9A8",
+        amarillo: "#FFD93D",
+        rojo: "#FF6B6B",
+        blanco: "#ffffff",
+      },
       fontFamily: {
-        mifuentepersonalizada: ['mifuentepersonalizada', 'sans-serif'],
+        cute: ["'Poppins'", "sans-serif"],
       },
     },
   },

@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
 import { FileText, ImageIcon } from "lucide-react";
+import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -179,6 +180,7 @@ export default function Noticias() {
         <p className="text-center text-gray-500 animate-pulse">Cargando...</p>
       ) : (
         <>
+          <CarruselNoticias noticias={noticiasFiltradas} />
           <SeccionNoticias
             titulo="Últimas Noticias 🗞️"
             noticias={noticiasFiltradas}
@@ -219,8 +221,9 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      <h2 className="text-3xl font-bold text-blue-600">{titulo}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <h2 className="text-4xl font-extrabold text-green-500">{titulo}</h2>
+
+      <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
         {noticias.map((noti) => (
           <NoticiaCard
             key={noti._id}
@@ -242,7 +245,7 @@ function NoticiaCard({ noticia, onClick }) {
     <motion.div
       onClick={onClick}
       whileHover={{ scale: 1.03 }}
-      className="cursor-pointer bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition transform duration-300"
+      className="break-inside-avoid rounded-2xl bg-gray-100 border shadow-md p-4 flex flex-col space-y-4 hover:shadow-xl transition duration-300 cursor-pointer"
     >
       {/* Imagen arriba si es una imagen */}
       {esImagen && noticia.archivoUrl && (
@@ -254,12 +257,10 @@ function NoticiaCard({ noticia, onClick }) {
       )}
 
       {/* Contenido */}
-      <div className="p-4 flex flex-col flex-grow space-y-3">
+      <div className="flex flex-col space-y-3 p-4">
         {/* Título */}
         <div className="flex justify-between items-center">
-          <h3 className="font-bold text-yellow-500 text-lg line-clamp-2">
-            {noticia.titulo}
-          </h3>
+          <h3 className="font-bold text-2xl text-gray-500">{noticia.titulo}</h3>
 
           {/* Tipo de archivo */}
           <span
@@ -285,9 +286,7 @@ function NoticiaCard({ noticia, onClick }) {
 
         {/* Contenido breve */}
         {noticia.contenido && (
-          <p className="text-gray-600 text-sm line-clamp-3">
-            {noticia.contenido}
-          </p>
+          <p className="text-gray-600 text-base">{noticia.contenido}</p>
         )}
 
         {/* Si es archivo, mostrar botón */}
@@ -297,7 +296,7 @@ function NoticiaCard({ noticia, onClick }) {
               e.stopPropagation();
               window.open(noticia.archivoUrl, "_blank");
             }}
-            className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 rounded-lg mt-2"
+            className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg transition"
           >
             📄 Ver Documento
           </button>
