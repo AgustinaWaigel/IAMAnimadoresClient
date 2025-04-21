@@ -1,19 +1,46 @@
-export default function CustomToolbar({ label, onNavigate, onView, setVistaActual }) {
-    return (
-      <div className="flex items-center justify-between p-4">
-        <div className="flex gap-2">
-          <button onClick={() => onNavigate('TODAY')} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Hoy</button>
-          <button onClick={() => onNavigate('PREV')} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">◀️</button>
-          <button onClick={() => onNavigate('NEXT')} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">▶️</button>
-        </div>
+// src/components/CustomToolbar.jsx
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+export default function CustomToolbar({ label, onNavigate, setVistaActual }) {
+  const handleSelectChange = (e) => {
+    setVistaActual(e.target.value);
+  };
+
+  return (
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+      
+      {/* Botones de navegación */}
+      <div className="flex justify-center md:justify-start items-center gap-2">
+        <button
+          onClick={() => onNavigate("PREV")}
+          className="p-2 bg-gray-200 hover:bg-gray-300 rounded-full"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
         <span className="text-lg font-semibold">{label}</span>
-        <div className="flex gap-2">
-          <button onClick={() => { onView('month'); setVistaActual('month'); }} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Mes</button>
-          <button onClick={() => { onView('week'); setVistaActual('week'); }} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Semana</button>
-          <button onClick={() => { onView('day'); setVistaActual('day'); }} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Día</button>
-          <button onClick={() => { onView('agenda'); setVistaActual('agenda'); }} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Agenda</button>
-        </div>
+
+        <button
+          onClick={() => onNavigate("NEXT")}
+          className="p-2 bg-gray-200 hover:bg-gray-300 rounded-full"
+        >
+          <ChevronRight size={20} />
+        </button>
       </div>
-    );
-  }
-  
+
+      {/* Selector de vista */}
+      <div className="flex justify-center md:justify-end">
+        <select
+          onChange={handleSelectChange}
+          className="border p-2 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-yellow-400"
+        >
+          <option value="month">Mes</option>
+          <option value="week">Semana</option>
+          <option value="day">Día</option>
+          <option value="agenda">Agenda</option>
+        </select>
+      </div>
+
+    </div>
+  );
+}
