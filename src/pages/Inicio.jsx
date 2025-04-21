@@ -3,10 +3,10 @@ import { motion } from "framer-motion"; // ✨ Para animaciones suaves
 
 const Inicio = () => {
   return (
-    <div className="min-h-screen pb-10 flex flex-col items-center  text-center px-6 bg-gradient-to-b from-white to-yellow-100">
-      <div className="bg-gradient-to-tr from-amber-200 to-slate-10 h-screen w-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="pb-10 flex flex-col items-center  text-center px-6 bg-gradient-to-b from-white to-yellow-100 " >
+      <div className="bg-gradient-to-b from-amber-100 to-slate-10 h-screen w-screen flex flex-col items-center justify-center relative overflow-hidden">
         <motion.h1
-          className="text-4xl md:text-6xl font-extrabold text-yellow-400 mb-6 text-center px-4"
+          className="text-4xl md:text-6xl font-cute text-red-700 mb-6 text-center px-4"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -15,7 +15,7 @@ const Inicio = () => {
         </motion.h1>
 
         <motion.img
-          src="/Logo.png"
+          src="/logo año diocesano.png"
           alt="Niña misionera"
           className="w-72 md:w-96"
           initial={{ opacity: 0, y: 30 }}
@@ -45,7 +45,7 @@ const Inicio = () => {
       <motion.img
         src="/imagenes/imagenabrazo.png"
         alt="Bienvenida"
-        className="w-64 md:w-80 mb-10"
+        className="md:w-80 mb-10"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.6, duration: 0.8 }}

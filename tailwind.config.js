@@ -16,7 +16,7 @@ export default {
         blanco: "#ffffff",
       },
       fontFamily: {
-        cute: ["'Poppins'", "sans-serif"],
+        cute: ["Poppins", "sans-serif"],
       },
     },
   },

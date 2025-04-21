@@ -288,7 +288,7 @@ function Tarjeta({ titulo, imagen, contenido }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border overflow-hidden flex flex-col hover:shadow-2xl transition"
+      className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border overflow-hidden flex flex-col hover:shadow-2xl transition "
     >
       <motion.img
         src={imagen}
@@ -319,7 +319,7 @@ function Tarjeta({ titulo, imagen, contenido }) {
 
 export default function HistoriaIAM() {
   return (
-    <div className="bg-gradient-to-b from-yellow-100 via-white to-yellow-100 min-h-screen py-16 px-4 md:px-20 space-y-24">
+    <div className="bg-white min-h-screen py-16 px-4 md:px-20 space-y-24">
       {secciones.map((seccion, idx) => (
         <motion.section
           key={idx}
@@ -345,7 +345,7 @@ export default function HistoriaIAM() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
             {seccion.tarjetas.map((tarjeta, idx2) => (
               <Tarjeta key={idx2} {...tarjeta} />
             ))}
