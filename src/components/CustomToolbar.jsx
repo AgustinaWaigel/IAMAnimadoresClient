@@ -32,7 +32,7 @@ export default function CustomToolbar({ label, onNavigate, setVistaActual }) {
       <div className="flex justify-center md:justify-end">
         <select
           onChange={handleSelectChange}
-          className="border p-2 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-yellow-400"
+          className="border p-2 rounded-md bg-white shadow-sm focus:ring-2 focus:ring-red-400"
         >
           <option value="month">Mes</option>
           <option value="week">Semana</option>

@@ -308,7 +308,7 @@ function Tarjeta({ titulo, imagen, contenido }) {
         </p>
         <button
           onClick={() => setExpandido(!expandido)}
-          className="mt-6 text-yellow-600 hover:text-yellow-800 transition self-start text-sm"
+          className="mt-6 text-red-600 hover:text-red-800 transition self-start text-sm"
         >
           {expandido ? "Leer menos" : "Leer más"}
         </button>

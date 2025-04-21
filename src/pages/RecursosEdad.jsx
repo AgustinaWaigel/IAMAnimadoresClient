@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
-import { Trash2, FileText, ImageIcon } from "lucide-react";
+import { Trash2, FileText, ImageIcon, Upload, Eye } from "lucide-react";
 
 const categorias = [
   "catequesis",
@@ -26,7 +26,9 @@ export default function RecursosEdad() {
   useEffect(() => {
     const fetchRecursos = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`
+        );
         if (!res.ok) throw new Error("No se pudieron obtener los recursos");
 
         const data = await res.json();
@@ -50,24 +52,27 @@ export default function RecursosEdad() {
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!archivo) return alert("📎 Seleccioná un archivo");
-  
+
     const formData = new FormData();
     formData.append("archivo", archivo);
     formData.append("edad", edad);
     formData.append("categoria", categoria);
     formData.append("objetivo", objetivo);
     formData.append("tipoArchivo", tipoArchivoForm); // 👈 agregamos tipoArchivo
-  
+
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recursos/upload`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: formData,
-        credentials: "include",
-      });
-  
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/recursos/upload`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: formData,
+          credentials: "include",
+        }
+      );
+
       const data = await res.json();
       if (data.success) {
         alert("✅ Recurso subido");
@@ -88,20 +93,24 @@ export default function RecursosEdad() {
       console.error(err);
     }
   };
-  
 
   const handleDelete = async (id, categoria) => {
-    const confirm = window.confirm("¿Estás seguro que querés borrar este recurso?");
+    const confirm = window.confirm(
+      "¿Estás seguro que querés borrar este recurso?"
+    );
     if (!confirm) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recursos/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/recursos/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          credentials: "include",
+        }
+      );
 
       const data = await res.json();
       if (data.success) {
@@ -130,7 +139,7 @@ export default function RecursosEdad() {
 
   return (
     <div className="mx-auto p-6 space-y-10">
-      <h1 className="text-3xl font-bold text-yellow-400 capitalize">
+      <h1 className="text-3xl font-bold text-red-700 capitalize">
         Recursos para {edad}
       </h1>
 
@@ -138,7 +147,7 @@ export default function RecursosEdad() {
         (cat) =>
           (archivos[cat] || []).length > 0 && (
             <div key={cat}>
-              <h2 className="text-xl font-semibold text-yellow-400 capitalize mb-2">
+              <h2 className="text-xl font-semibold text-red-700 capitalize mb-2 ">
                 {cat}
               </h2>
               <div className="grid gap-4 md:grid-cols-2">
@@ -146,7 +155,7 @@ export default function RecursosEdad() {
                   <motion.div
                     key={file._id || file.nombre}
                     whileHover={{ scale: 1.02 }}
-                    className="bg-white/70 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition-all flex flex-col justify-between"
+                    className="bg-gray-100 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition-all flex flex-col justify-between"
                   >
                     {/* Vista previa SOLO para imágenes */}
                     {file.tipoArchivo === "imagen" && (
@@ -161,7 +170,7 @@ export default function RecursosEdad() {
                     <div className="p-4 flex flex-col justify-between flex-grow">
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <h3 className="text-sm font-bold text-blue-700 break-words line-clamp-2">
+                          <h3 className="text-sm font-bold text-red-700 break-words line-clamp-2">
                             {file.nombre}
                           </h3>
                           <span
@@ -194,14 +203,12 @@ export default function RecursosEdad() {
                       <div className="mt-4 flex flex-col space-y-2">
                         <button
                           onClick={() => abrirArchivo(file)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm rounded-lg p-2"
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
                         >
-                          👁️ Ver {file.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+                                <Eye className="w-5 h-5" />
+                          Ver{" "}
+                          {file.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
                         </button>
-
-                        <p className="text-xs text-gray-400 text-center">
-                          📅 {new Date(file.fecha || file.createdAt).toLocaleDateString()}
-                        </p>
 
                         {user && (
                           <button
@@ -227,75 +234,85 @@ export default function RecursosEdad() {
           <div className="text-right">
             <button
               onClick={() => setMostrarFormulario(!mostrarFormulario)}
-              className="bg-yellow-400 text-white font-semibold px-4 py-2 rounded hover:bg-yellow-500 transition"
+              className="bg-yellow-400 text-white font-semibold px-4 py-2 rounded hover:bg-yellow-500 transition flex items-center gap-2 justify-center"
             >
-              {mostrarFormulario ? "Cerrar formulario" : "📤 Subir nuevo recurso"}
+              {mostrarFormulario ? (
+                "Cerrar formulario"
+              ) : (
+                <>
+                  <Upload className="w-5 h-5" />
+                  Subir nuevo recurso
+                </>
+              )}
             </button>
           </div>
 
           {mostrarFormulario && (
-            <form onSubmit={handleUpload} className="bg-gray-100 p-4 rounded shadow space-y-4 mt-4">
-            <h3 className="text-lg font-semibold text-yellow-400">
-              Subir nuevo recurso
-            </h3>
-          
-            <div>
-              <label className="block mb-1">Categoría:</label>
-              <select
-                value={categoria}
-                onChange={(e) => setCategoria(e.target.value)}
-                className="w-full border rounded p-2"
-              >
-                {categorias.map((c) => (
-                  <option key={c} value={c}>
-                    {c.charAt(0).toUpperCase() + c.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          
-            <div>
-              <label className="block mb-1">Tipo de archivo:</label>
-              <select
-                value={tipoArchivoForm}
-                onChange={(e) => setTipoArchivoForm(e.target.value)}
-                className="w-full border rounded p-2"
-              >
-                <option value="pdf">PDF</option>
-                <option value="documento">Documento Word</option>
-                <option value="imagen">Imagen</option>
-                <option value="otro">Otro</option>
-              </select>
-            </div>
-          
-            <div>
-              <label className="block mb-1">Objetivo o descripción:</label>
-              <input
-                type="text"
-                value={objetivo}
-                onChange={(e) => setObjetivo(e.target.value)}
-                className="w-full border rounded p-2"
-              />
-            </div>
-          
-            <div>
-              <label className="block mb-1">Archivo:</label>
-              <input
-                key={fileKey}
-                type="file"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
-                onChange={(e) => setArchivo(e.target.files[0])}
-                className="w-full"
-              />
-            </div>
-          
-            <button
-              type="submit"
-              className="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-700"
+            <form
+              onSubmit={handleUpload}
+              className="bg-gray-100 p-4 rounded shadow space-y-4 mt-4"
             >
-              Subir recurso
-            </button>
-          </form>
+              <h3 className="text-lg font-semibold text-yellow-400">
+                Subir nuevo recurso
+              </h3>
+
+              <div>
+                <label className="block mb-1">Categoría:</label>
+                <select
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value)}
+                  className="w-full border rounded p-2"
+                >
+                  {categorias.map((c) => (
+                    <option key={c} value={c}>
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block mb-1">Tipo de archivo:</label>
+                <select
+                  value={tipoArchivoForm}
+                  onChange={(e) => setTipoArchivoForm(e.target.value)}
+                  className="w-full border rounded p-2"
+                >
+                  <option value="pdf">PDF</option>
+                  <option value="documento">Documento Word</option>
+                  <option value="imagen">Imagen</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block mb-1">Objetivo o descripción:</label>
+                <input
+                  type="text"
+                  value={objetivo}
+                  onChange={(e) => setObjetivo(e.target.value)}
+                  className="w-full border rounded p-2"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1">Archivo:</label>
+                <input
+                  key={fileKey}
+                  type="file"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
+                  onChange={(e) => setArchivo(e.target.files[0])}
+                  className="w-full"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-700"
+              >
+                Subir recurso
+              </button>
+            </form>
           )}
         </>
       )}

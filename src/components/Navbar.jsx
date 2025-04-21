@@ -6,7 +6,8 @@ import { getDeterministicAvatar } from "../data/avatarOptions";
 export default function Navbar() {
   const { user, logout, isAuthenticated, isLoading } = useAuth();
 
-  const avatarUrl = user?.avatarUrl || getDeterministicAvatar(user?.username)?.src;
+  const avatarUrl =
+    user?.avatarUrl || getDeterministicAvatar(user?.username)?.src;
 
   return (
     <nav className="w-full sticky top-0 z-50 bg-gray-50 text-white p-4 flex justify-between items-center shadow-md">
@@ -26,24 +27,32 @@ export default function Navbar() {
               <>
                 <div className="flex items-center space-x-2">
                   {avatarUrl && (
-                    <img
-                      src={avatarUrl}
-                      alt="Avatar"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-yellow-400"
-                    />
+                    <Link
+                      to="/profile"
+                    >
+                      <img
+                        src={avatarUrl}
+                        alt="Avatar"
+                        className="w-10 h-10 rounded-full object-cover border-2 border-red-400"
+                        onError={(e) => {
+                          e.target.onerror = null; // Evitar bucle infinito
+                          e.target.src = "/avatars/juanadearco.jpg"; // Imagen por defecto
+                        }}
+                      />
+                    </Link>
                   )}
                 </div>
 
                 <Link
                   to="/profile"
-                  className="text-sm font-medium text-yellow-500 hover:text-yellow-900 transition"
+                  className="text-sm font-medium text-red-500 hover:text-red-900 transition"
                 >
                   Perfil
                 </Link>
 
                 <button
                   onClick={logout}
-                  className="text-sm bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-full transition"
+                  className="text-sm bg-red-700 hover:bg-red-400 text-white px-4 py-2 rounded-full transition"
                 >
                   Cerrar sesión
                 </button>
@@ -52,7 +61,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-medium bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-full transition"
+                  className="text-sm font-medium bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-full transition"
                 >
                   Iniciar sesión
                 </Link>

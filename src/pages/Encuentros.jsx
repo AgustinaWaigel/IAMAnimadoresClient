@@ -3,16 +3,17 @@ import { motion } from "framer-motion";
 
 export default function Recursos() {
   const edades = [
-    { id: "pequeños", label: "Pequeños", colorClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" },
-    { id: "ninos", label: "Niños", colorClass: "bg-green-100 text-green-800 hover:bg-green-200" },
-    { id: "preadolescentes", label: "Preadolescentes", colorClass: "bg-blue-100 text-blue-800 hover:bg-blue-200"},
-    { id: "adolescentes", label: "Adolescentes", colorClass: "bg-red-100 text-red-800 hover:bg-red-200"},
+    { id: "pequeños", label: "Pequeños", colorClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-4 border-yellow-400"},
+    { id: "ninos", label: "Niños", colorClass: "bg-green-100 text-green-800 hover:bg-green-200 border-4 border-green-400" },
+
+    { id: "preadolescentes", label: "Preadolescentes", colorClass: "bg-blue-100 text-blue-800 hover:bg-blue-200 border-4 border-blue-400"},
+    { id: "adolescentes", label: "Adolescentes", colorClass: "bg-red-100 text-red-800 hover:bg-red-200 border-4 border-red-400"},
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-white to-yellow-50 py-12 px-6 space-y-16">
+    <div className="min-h-screen bg-gradient-to-b from-red-50 via-white to-red-50 py-12 px-6 space-y-16">
       <motion.h1 
-        className="text-4xl font-extrabold text-center text-yellow-400 mb-6"
+        className="text-4xl font-extrabold text-center text-red-700 mb-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -31,7 +32,7 @@ export default function Recursos() {
 
       <section className="space-y-8">
         <motion.h2 
-          className="text-2xl font-bold text-yellow-500"
+          className="text-2xl font-bold text-red-800"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}

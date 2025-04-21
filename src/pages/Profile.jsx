@@ -72,10 +72,10 @@ export default function Profile() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="max-w-xl mx-auto mt-12 p-8 bg-gradient-to-br from-white via-yellow-50 to-white rounded-3xl shadow-2xl"
+      className="max-w-xl mx-auto mt-12 p-8 bg-gradient-to-br from-white via-red-50 to-white rounded-3xl shadow-2xl"
     >
       <motion.h1
-        className="text-4xl font-extrabold text-yellow-400 mb-8 text-center"
+        className="text-4xl font-extrabold text-red-700 mb-8 text-center"
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -87,7 +87,7 @@ export default function Profile() {
         <motion.img
           src={avatar.src}
           alt="Avatar"
-          className={`w-36 h-36 object-cover rounded-full border-4 border-yellow-400 shadow-lg cursor-pointer ${isSpinning ? "animate-spin-slow" : ""}`}
+          className={`w-36 h-36 object-cover rounded-full border-4 border-red-700 shadow-lg cursor-pointer ${isSpinning ? "animate-spin-slow" : ""}`}
           onClick={spinAvatar}
           whileHover={{ scale: 1.05 }}
         />
@@ -98,7 +98,7 @@ export default function Profile() {
 
       <div className="mt-10 text-center">
         <p className="text-gray-700"><strong>Email:</strong> {user?.email}</p>
-        <p className="text-sm text-gray-400 mt-2 italic">
+        <p className="text-sm text-gray-700 mt-2 italic">
           ✨ Toca tu avatar para cambiarlo ✨
         </p>
       </div>

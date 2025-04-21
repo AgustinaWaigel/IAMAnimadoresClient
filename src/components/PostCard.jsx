@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
-import { Trash2, FileText, ImageIcon } from "lucide-react";
+import { Trash2, FileText, ImageIcon, Eye } from "lucide-react";
 
 export default function PostCard({ post, onDelete }) {
   const { user } = useAuth();
@@ -34,7 +34,7 @@ export default function PostCard({ post, onDelete }) {
         <img
           src={archivoUrl}
           alt="Vista previa"
-          className="w-full  object-cover"
+          className="w-48 h-full object-cover"
         />
       )}
 
@@ -42,7 +42,7 @@ export default function PostCard({ post, onDelete }) {
       <div className="p-4 flex flex-col justify-between flex-grow">
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-blue-700 line-clamp-2">
+            <h3 className="text-lg font-bold text-red-700 line-clamp-2">
               {post.titulo || post.categoria}
             </h3>
             <span
@@ -78,7 +78,8 @@ export default function PostCard({ post, onDelete }) {
               onClick={() => abrirArchivo(archivoUrl)}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm rounded-lg p-2"
             >
-              👁️ Ver {tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+              <Eye className="w-5 h-5" />
+              Ver {tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
             </button>
           )}
 

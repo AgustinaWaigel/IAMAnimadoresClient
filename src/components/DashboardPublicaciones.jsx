@@ -5,7 +5,7 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalPublicacion from "../components/ModalPublicacion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { FileText, ImageIcon } from "lucide-react";
+import { FileText, ImageIcon, Eye, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function DashboardPublicaciones() {
   const { user } = useAuth();
@@ -141,7 +141,7 @@ export default function DashboardPublicaciones() {
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
       <motion.h1
-        className="text-4xl font-bold text-yellow-400 text-center"
+        className="text-4xl font-bold text-red-700 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
@@ -153,12 +153,12 @@ export default function DashboardPublicaciones() {
           <motion.button
             onClick={() => setMostrarFormulario(!mostrarFormulario)}
             className={`px-6 py-2 rounded-full font-semibold ${
-              mostrarFormulario ? "bg-red-500" : "bg-blue-500"
+              mostrarFormulario ? "bg-yellow-500" : "bg-yellow-500"
             } text-white transition`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {mostrarFormulario ? "❌ Cancelar" : "➕ Nueva publicación"}
+            {mostrarFormulario ? "Cancelar" : "Nueva publicación"}
           </motion.button>
         </div>
       )}
@@ -175,7 +175,7 @@ export default function DashboardPublicaciones() {
             {/* Texto de la publicación */}
             <textarea
               rows="3"
-              className="w-full p-3 border rounded focus:ring-2 focus:ring-yellow-300"
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-red-300"
               placeholder="Escribí tu mensaje..."
               value={contenido}
               onChange={(e) => setContenido(e.target.value)}
@@ -225,7 +225,7 @@ export default function DashboardPublicaciones() {
             {/* Botón Publicar */}
             <button
               type="submit"
-              className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded w-full transition"
+              className="bg-red-700 hover:bg-red-500 text-white px-4 py-2 rounded w-full transition"
             >
               Publicar
             </button>
@@ -236,23 +236,23 @@ export default function DashboardPublicaciones() {
       <div className="flex justify-between items-center my-6">
         <button
           onClick={() => setSemanaOffset((prev) => prev - 1)}
-          className="flex items-center gap-2 text-sm bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+          className="flex items-center gap-2 text-sm bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300"
         >
-          <ArrowLeft size={20} /> Semana anterior
+          <ChevronLeft size={20} />
         </button>
 
         <button
           onClick={() => setSemanaOffset((prev) => prev + 1)}
-          className="flex items-center gap-2 text-sm bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+          className="flex items-center gap-2 text-sm bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300"
         >
-          Semana siguiente <ArrowRight size={20} />
+          <ChevronRight size={20} />
         </button>
       </div>
 
       {loading ? (
         <p className="text-center text-gray-500">Cargando publicaciones...</p>
       ) : publicacionesFiltradas.length === 0 ? (
-        <p className="text-center text-gray-400">
+        <p className="text-center text-gray-700">
           No hay publicaciones en esta semana.
         </p>
       ) : (
@@ -277,7 +277,7 @@ export default function DashboardPublicaciones() {
       <div className="flex flex-col flex-grow p-4 space-y-4">
         {/* Título (categoría) */}
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold text-blue-700 line-clamp-2">
+          <h3 className="text-lg font-bold text-red-700 line-clamp-2">
             {post.categoria}
           </h3>
 
@@ -314,15 +314,18 @@ export default function DashboardPublicaciones() {
               e.stopPropagation();
               window.open(post.archivoUrl, "_blank");
             }}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm rounded-lg p-2"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-2"
           >
-            👁️ Ver {post.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+            <Eye className="w-5 h-5" />
+            Ver {post.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
           </button>
         )}
 
         {/* Footer: fecha */}
-        <div className="flex justify-between items-center text-xs text-gray-400 pt-4">
-          <span>📅 {new Date(post.createdAt).toLocaleDateString()}</span>
+        <div className="flex items-center text-xs text-gray-700 pt-4">
+          <span className="flex items-center gap-1">
+            <Calendar size={14} />
+            {new Date(post.createdAt).toLocaleDateString()}</span>
         </div>
       </div>
     </motion.li>

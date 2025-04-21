@@ -136,14 +136,14 @@ export default function Calendario() {
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 space-y-4 md:space-y-0 md:space-x-4 text-center md:text-left">
-        <h1 className="text-3xl font-bold text-yellow-400 font-mifuentepersonalizada">
+        <h1 className="text-3xl font text-red-700 font-mifuentepersonalizada">
           Calendario
         </h1>
 
         {user?.rol === "admin" && (
           <button
             onClick={() => setMostrarModal(true)}
-            className="bg-yellow-400 text-white py-2 px-4 rounded hover:bg-yellow-700 transition"
+            className="bg-red-700 text-white py-2 px-4 rounded hover:bg-red-700 transition"
           >
             Crear evento
           </button>

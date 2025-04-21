@@ -87,7 +87,7 @@ export default function Escuelaconjesus() {
     initial={{ y: -20, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
     transition={{ duration: 0.8 }}
-    className="text-5xl font-cute text-yellow-400 mb-6 text-center drop-shadow-lg"
+    className="text-5xl font-cute text-red-700 mb-6 text-center drop-shadow-lg"
   >
     Escuela con Jesús
   </motion.h1>
@@ -110,9 +110,9 @@ export default function Escuelaconjesus() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: i * 0.05 }}
-        className="border-2 border-yellow-200 rounded-2xl overflow-hidden shadow-md bg-yellow-100 p-5 group open:shadow-lg"
+        className="border-2 border-red-200 rounded-2xl overflow-hidden shadow-md bg-red-100 p-5 group open:shadow-lg"
       >
-        <summary className="font-semibold text-gray-700 text-xl cursor-pointer group-hover:text-yellow-400 transition-all">
+        <summary className="font-semibold text-gray-700 text-xl cursor-pointer group-hover:text-red-700 transition-all">
           {titulo}
         </summary>
         <motion.div

@@ -10,7 +10,7 @@ export default function ModalEvento({ evento, onClose, onDelete, isAdmin }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-md relative animate-slideIn">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-500 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-red-800 text-center">
           {evento.title}
         </h2>
 
@@ -39,7 +39,7 @@ export default function ModalEvento({ evento, onClose, onDelete, isAdmin }) {
           )}
           <button
             onClick={onClose}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition"
+            className="bg-gray-300 hover:bg-gray-700 text-gray-800 px-4 py-2 rounded-lg transition"
           >
             Cerrar
           </button>

@@ -12,7 +12,7 @@ export default function Sidebar() {
       {/* Botón del menú */}
       <button
         onClick={() => setOpen(true)}
-        className="ml-2 p-2 rounded-full bg-white text-yellow-400 hover:bg-yellow-100 shadow-md transition"
+        className="ml-2 p-2 rounded-full bg-white text-red-700 hover:bg-red-100 shadow-md transition"
       >
         <Menu size={24} />
       </button>
@@ -27,14 +27,14 @@ export default function Sidebar() {
 
       {/* Sidebar deslizante */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-white to-yellow-100 shadow-lg z-50 transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-white to-red-100 shadow-lg z-50 transform transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Encabezado */}
         <div className="flex justify-between items-center px-4 py-4 border-b shadow-sm">
-          <h2 className="text-2xl font-extrabold text-yellow-400">Menú</h2>
-          <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-yellow-400 transition">
+          <h2 className="text-2xl font-extrabold text-red-700">Menú</h2>
+          <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-red-700 transition">
             <X size={28} />
           </button>
         </div>
@@ -69,7 +69,7 @@ function NavLink({ to, setOpen, text }) {
     <Link
       to={to}
       onClick={() => setOpen(false)}
-      className="text-gray-700 hover:text-yellow-400 font-semibold transition text-lg"
+      className="text-gray-700 hover:text-red-700 font-semibold transition text-lg"
     >
       {text}
     </Link>
