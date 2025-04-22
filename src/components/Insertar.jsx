@@ -95,7 +95,7 @@ export default function Insertar({ isAdmin = false, area = "comunicacion", onNue
           <option value="imagen">Imagen</option>
           <option value="pdf">PDF</option>
           <option value="documento">Documento (Word)</option>
-          <option value="otro">Otro</option>
+          <option value="otro">Texto</option>
         </select>
       </div>
 

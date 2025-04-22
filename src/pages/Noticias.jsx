@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
-import { FileText, ImageIcon, File } from "lucide-react";
+import { FileText, ImageIcon, File, Text, Trash2 } from "lucide-react";
 import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Noticias() {
@@ -185,11 +185,15 @@ export default function Noticias() {
             titulo="Últimas Noticias 🗞️"
             noticias={noticiasFiltradas}
             setNoticiaSeleccionada={setNoticiaSeleccionada}
+            user={user}
+            onDelete={handleDelete} // 👈 AGREGÁ ESTA LÍNEA
           />
           <SeccionNoticias
             titulo="Recursos Disponibles 📚"
             noticias={recursosFiltrados}
             setNoticiaSeleccionada={setNoticiaSeleccionada}
+            user={user}
+            onDelete={handleDelete} // 👈 TAMBIÉN ACÁ
           />
         </>
       )}
@@ -210,7 +214,7 @@ export default function Noticias() {
   );
 }
 
-function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
+function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada, onDelete, user }) {
   if (noticias.length === 0) return null;
 
   return (
@@ -229,6 +233,8 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
             key={noti._id}
             noticia={noti}
             onClick={() => setNoticiaSeleccionada(noti)}
+            onDelete={onDelete}
+            user={user}
           />
         ))}
       </div>
@@ -236,10 +242,11 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
   );
 }
 
-function NoticiaCard({ noticia, onClick }) {
+function NoticiaCard({ noticia, onClick, onDelete, user }) {
   const esImagen = noticia.tipoArchivo === "imagen";
   const esArchivo =
     noticia.tipoArchivo === "pdf" || noticia.tipoArchivo === "documento";
+  const esTexto = noticia.tipoArchivo === "texto";
 
   return (
     <motion.div
@@ -252,7 +259,7 @@ function NoticiaCard({ noticia, onClick }) {
         <img
           src={noticia.archivoUrl}
           alt="Vista previa"
-          className="w-full h-48 object-cover"
+          className="w-full object-cover"
         />
       )}
 
@@ -265,22 +272,26 @@ function NoticiaCard({ noticia, onClick }) {
           {/* Tipo de archivo */}
           <span
             className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
-              esImagen
+              noticia.tipoArchivo === "imagen"
                 ? "bg-green-100 text-green-700"
-                : esArchivo
-                ? "bg-red-100 text-red-700"
-                : "bg-gray-100 text-gray-600"
+                : noticia.tipoArchivo === "texto"
+                ? "bg-blue-100 text-blue-700"
+                : "bg-red-100 text-red-700"
             }`}
           >
             {esImagen ? (
               <>
                 <ImageIcon size={14} /> Imagen
               </>
-            ) : esArchivo ? (
+            ) : esTexto ? (
+              <>
+                <Text size={14} /> Texto
+              </>
+            ) : (
               <>
                 <FileText size={14} /> Archivo
               </>
-            ) : null}
+            )}
           </span>
         </div>
 
@@ -298,8 +309,24 @@ function NoticiaCard({ noticia, onClick }) {
             }}
             className="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition"
           >
-            <File className="w-5 h-5 inline-block" />{" "}
-            Ver Documento
+            <File className="w-5 h-5 inline-block" /> Ver Documento
+          </button>
+        )}
+        {user?.rol === "admin" && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (
+                confirm(
+                  "¿Estás seguro de que querés eliminar esta publicación?"
+                )
+              ) {
+                onDelete(noticia._id); // ✅ usa la función del componente padre
+              }
+            }}
+            className="bg-red-100 text-red-600 text-xs rounded-lg py-1 mt-2 hover:bg-red-200 transition flex items-center justify-center gap-1"
+          >
+            <Trash2 size={16} /> Eliminar
           </button>
         )}
 

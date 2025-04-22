@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
-import { Trash2, FileText, ImageIcon, Eye, Calendar } from "lucide-react";
+import { Trash2, FileText, ImageIcon, Eye, Calendar, Text } from "lucide-react";
 
 export default function PostCard({ post, onDelete }) {
   const { user } = useAuth();
@@ -49,12 +49,20 @@ export default function PostCard({ post, onDelete }) {
               className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
                 tipoArchivo === "imagen"
                   ? "bg-green-100 text-green-700"
+                  : tipoArchivo === "otro"
+                  ? "bg-blue-100 text-blue-700"
                   : "bg-red-100 text-red-700"
               }`}
             >
               {tipoArchivo === "imagen" ? (
                 <>
                   <ImageIcon size={14} /> Imagen
+                </>
+              ) : 
+              tipoArchivo === "otro" ? 
+               (
+                <>
+                  <Text size={14} /> Otro
                 </>
               ) : (
                 <>
@@ -79,7 +87,7 @@ export default function PostCard({ post, onDelete }) {
               className="bg-gray-300 hover:bg-gray-600 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
             >
               <Eye className="w-5 h-5" />
-              Ver {tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+              Ver { (tipoArchivo === "imagen" ? "Imagen" : (tipoArchivo === "otro" ? "Otro" : "Archivo")) }
             </button>
           )}
 
