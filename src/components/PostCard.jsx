@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
-import { Trash2, FileText, ImageIcon, Eye } from "lucide-react";
+import { Trash2, FileText, ImageIcon, Eye, Calendar } from "lucide-react";
 
 export default function PostCard({ post, onDelete }) {
   const { user } = useAuth();
@@ -27,14 +27,14 @@ export default function PostCard({ post, onDelete }) {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className="relative bg-white/70 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition-all flex flex-col justify-between"
+      className="relative backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition-all flex flex-col justify-between bg-gray-100"
     >
       {/* Vista previa SOLO para imagenes */}
       {tipoArchivo === "imagen" && (
         <img
           src={archivoUrl}
           alt="Vista previa"
-          className="w-48 h-full object-cover"
+          className="w-full object-cover"
         />
       )}
 
@@ -76,7 +76,7 @@ export default function PostCard({ post, onDelete }) {
           {archivoUrl && (
             <button
               onClick={() => abrirArchivo(archivoUrl)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm rounded-lg p-2"
+              className="bg-gray-300 hover:bg-gray-600 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
             >
               <Eye className="w-5 h-5" />
               Ver {tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
@@ -84,7 +84,8 @@ export default function PostCard({ post, onDelete }) {
           )}
 
           <p className="text-xs text-gray-400 text-center">
-            📅 {new Date(post.fecha || post.createdAt).toLocaleDateString()}
+            <Calendar size={14} className="inline" />{" "}
+            {new Date(post.fecha || post.createdAt).toLocaleDateString()}
           </p>
 
           {(user?.rol === "admin" || userId === post.autor?._id) && (

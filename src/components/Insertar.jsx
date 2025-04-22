@@ -69,7 +69,7 @@ export default function Insertar({ isAdmin = false, area = "comunicacion", onNue
         value={titulo}
         onChange={(e) => setTitulo(e.target.value)}
         placeholder="Título o Categoría..."
-        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none transition"
+        className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-400 outline-none transition"
         required
         whileFocus={{ scale: 1.02 }}
         disabled={subiendo}
@@ -79,7 +79,7 @@ export default function Insertar({ isAdmin = false, area = "comunicacion", onNue
         placeholder="Descripción (opcional)"
         value={contenido}
         onChange={(e) => setContenido(e.target.value)}
-        className="border border-gray-300 p-3 rounded-lg h-32 resize-none focus:ring-2 focus:ring-yellow-400 outline-none transition"
+        className="border border-gray-300 p-3 rounded-lg h-32 resize-none focus:ring-2 focus:ring-red-400 outline-none transition"
         whileFocus={{ scale: 1.02 }}
         disabled={subiendo}
       />
@@ -112,7 +112,7 @@ export default function Insertar({ isAdmin = false, area = "comunicacion", onNue
       <motion.button
         type="submit"
         whileHover={{ scale: 1.05 }}
-        className={`${subiendo ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-400 hover:bg-yellow-500"} bg-yellow-300 text-white font-semibold py-2 rounded-lg shadow-md transition`}
+        className={`${subiendo ? "bg-gray-400 cursor-not-allowed" : "bg-red-400 hover:bg-red-500"} bg-red-300 text-white font-semibold py-2 rounded-lg shadow-md transition`}
         disabled={subiendo}
       >
         {subiendo ? "Publicando..." : "Publicar Contenido"}

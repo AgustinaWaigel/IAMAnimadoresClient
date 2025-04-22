@@ -51,7 +51,7 @@ export default function Logistica() {
   };
 
   return (
-    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-red-100 shadow-lg min-h-screen flex flex-col">
+    <div className="mx-auto p-10 space-y-8 bg-white shadow-lg min-h-screen flex flex-col">
       <button
         onClick={() => navigate("/areas")}
         className="text-red-600 hover:text-red-800 font-semibold text-sm mb-6 flex items-center gap-2"

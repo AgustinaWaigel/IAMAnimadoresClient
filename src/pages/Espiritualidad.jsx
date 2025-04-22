@@ -51,7 +51,7 @@ export default function Espiritualidad() {
   };
 
   return (
-    <div className="mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-slate-100 shadow-lg min-h-screen">
+    <div className="mx-auto p-10 space-y-8 bg-white shadow-lg min-h-screen">
       <button
         onClick={() => navigate("/areas")}
         className="text-slate-400 hover:text-slate-600 font-semibold text-sm mb-6 flex items-center gap-2 "

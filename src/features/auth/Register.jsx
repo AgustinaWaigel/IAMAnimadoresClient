@@ -132,7 +132,7 @@ export default function Register() {
         onSubmit={handleRegister}
         className="w-full max-w-md bg-white p-6 rounded-lg shadow-md"
       >
-        <h2 className="text-2xl font-bold text-center mb-6 text-green-600">
+        <h2 className="text-2xl font-bold text-center mb-6 text-red-700">
           Crear Cuenta
         </h2>
 
@@ -149,10 +149,10 @@ export default function Register() {
           <p className="text-sm text-gray-500">Verificando...</p>
         )}
         {usernameDisponible === true && (
-          <p className="text-sm text-green-600">✅ Disponible</p>
+          <p className="text-sm text-red-700">✅ Disponible</p>
         )}
         {usernameDisponible === false && (
-          <p className="text-sm text-red-600">❌ Ya está en uso</p>
+          <p className="text-sm text-red-700">❌ Ya está en uso</p>
         )}
 
         <label className="block mt-4 mb-1 font-medium">Nombre</label>
@@ -190,10 +190,10 @@ export default function Register() {
           <p className="text-sm text-gray-500">Verificando correo...</p>
         )}
         {emailDisponible === true && (
-          <p className="text-sm text-green-600">✅ Disponible</p>
+          <p className="text-sm text-red-700">✅ Disponible</p>
         )}
         {emailDisponible === false && (
-          <p className="text-sm text-red-600">❌ Ya está registrado</p>
+          <p className="text-sm text-red-700">❌ Ya está registrado</p>
         )}
 
         <label className="block mt-4 mb-1 font-medium">Contraseña</label>
@@ -220,15 +220,15 @@ export default function Register() {
 
         <button
           type="submit"
-          className="w-full mt-6 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+          className="w-full mt-6 bg-red-700 text-white py-2 rounded-md hover:bg-red-700 transition"
           disabled={usernameDisponible === false || checkingUsername}
         >
           Registrarse
         </button>
 
-        <p className="text-center text-sm mt-4 text-gray-600">
+        <p className="text-center text-sm mt-4 text-gray-700">
           ¿Ya tenés una cuenta?{" "}
-          <Link to="/login" className="text-green-600 hover:underline">
+          <Link to="/login" className="text-red-700 hover:underline">
             Iniciar sesión
           </Link>
         </p>

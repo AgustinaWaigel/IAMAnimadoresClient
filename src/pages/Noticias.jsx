@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
-import { FileText, ImageIcon } from "lucide-react";
+import { FileText, ImageIcon, File } from "lucide-react";
 import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Noticias() {
@@ -89,7 +89,7 @@ export default function Noticias() {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-16">
       <motion.h1
-        className="text-5xl font-extrabold text-green-400 text-center"
+        className="text-5xl font-extrabold text-red-700 text-center"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -105,8 +105,8 @@ export default function Noticias() {
             onClick={() => setMostrarFormulario((prev) => !prev)}
             className={`px-6 py-2 rounded-full font-semibold transition ${
               mostrarFormulario
-                ? "bg-green-500 hover:bg-green-600 text-white"
-                : "bg-green-400 hover:bg-green-500 text-white"
+                ? "bg-red-700 hover:bg-red-600 text-white"
+                : "bg-red-700 hover:bg-red-500 text-white"
             }`}
           >
             {mostrarFormulario ? "Cancelar" : "Subir Noticia o Recurso"}
@@ -167,7 +167,7 @@ export default function Noticias() {
                   />
                 )}
 
-                <button className="bg-green-400 hover:bg-green-500 text-white px-6 py-2 rounded w-full transition">
+                <button className="bg-red-400 hover:bg-red-500 text-white px-6 py-2 rounded w-full transition">
                   Publicar
                 </button>
               </motion.form>
@@ -221,7 +221,7 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada }) {
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      <h2 className="text-4xl font-extrabold text-green-500">{titulo}</h2>
+      <h2 className="text-4xl font-extrabold text-red-700">{titulo}</h2>
 
       <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
         {noticias.map((noti) => (
@@ -260,7 +260,7 @@ function NoticiaCard({ noticia, onClick }) {
       <div className="flex flex-col space-y-3 p-4">
         {/* Título */}
         <div className="flex justify-between items-center">
-          <h3 className="font-bold text-2xl text-gray-500">{noticia.titulo}</h3>
+          <h3 className="font-bold text-2xl text-red-700">{noticia.titulo}</h3>
 
           {/* Tipo de archivo */}
           <span
@@ -296,9 +296,10 @@ function NoticiaCard({ noticia, onClick }) {
               e.stopPropagation();
               window.open(noticia.archivoUrl, "_blank");
             }}
-            className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg transition"
+            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition"
           >
-            📄 Ver Documento
+            <File className="w-5 h-5 inline-block" />{" "}
+            Ver Documento
           </button>
         )}
 

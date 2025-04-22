@@ -59,16 +59,16 @@ const Inicio = () => {
       >
         <Link
           to="/dashboard"
-          className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-lg transition"
+          className="bg-red-600 hover:bg-red-400 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-lg transition"
         >
           Ir al muro de publicaciones
         </Link>
 
         <Link
           to="/informacion"
-          className="bg-white border border-yellow-400 hover:bg-yellow-50 text-yellow-500 font-semibold py-3 px-6 rounded-lg text-lg shadow-lg transition"
+          className="bg-white border border-red-400 hover:bg-red-50 text-red-500 font-semibold py-3 px-6 rounded-lg text-lg shadow-lg transition"
         >
-          Conocer más
+          Conocer más sobre la IAM
         </Link>
       </motion.div>
 

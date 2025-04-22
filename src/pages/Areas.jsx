@@ -5,6 +5,7 @@ const areas = [
   {
     name: "Comunicación",
     color: "bg-blue-100",
+    border: "border-blue-400 border-4",
     text: "text-blue-800",
     img: "/area/comunicacion.png",
     path: "/comunicacion",
@@ -12,6 +13,7 @@ const areas = [
   {
     name: "Logística",
     color: "bg-red-100",
+    border: "border-red-400 border-4",
     text: "text-red-800",
     img: "/area/logistica.png",
     path: "/logistica",
@@ -19,6 +21,7 @@ const areas = [
   {
     name: "Espiritualidad",
     color: "bg-gray-100",
+    border: "border-white-400 border-4",
     text: "text-gray-700",
     img: "/area/espiritualidad.png",
     path: "/espiritualidad",
@@ -26,6 +29,7 @@ const areas = [
   {
     name: "Animación",
     color: "bg-green-100",
+    border: "border-green-400 border-4",
     text: "text-green-800",
     img: "/area/animacion.png",
     path: "/animacion",
@@ -33,6 +37,7 @@ const areas = [
   {
     name: "Formación",
     color: "bg-yellow-100",
+    border: "border-yellow-400 border-4",
     text: "text-yellow-800",
     img: "/area/formacion.png",
     path: "/formacion",
@@ -43,7 +48,7 @@ export default function Areas() {
   return (
     <div className=" min-h-screen flex flex-col items-center text-center px-6 py-12 bg-gradient-to-b from-white via-yellow-50 to-white">
       <motion.h1
-        className="font-mifuentepersonalizada text-5xl md:text-6xl mb-6 text-yellow-400 drop-shadow-md"
+        className="text-5xl md:text-6xl mb-6 text-red-700 drop-shadow-md"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -62,7 +67,7 @@ export default function Areas() {
       </motion.p>
 
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 "
+        className="grid grid-cols-1 w-full md:grid-cols-3 gap-8 "
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -70,8 +75,9 @@ export default function Areas() {
         {areas.map((area, idx) => (
           <motion.div
             key={area.name}
-            className={`${area.color} ${area.text} rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-transform duration-300 cursor-pointer`}
+            className={`${area.color} ${area.text} ${area.border} rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-transform duration-300 cursor-pointer`}
             whileHover={{ y: -5 }}
+
           >
             <Link
               to={area.path}

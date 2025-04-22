@@ -51,7 +51,7 @@ export default function Formacion() {
   };
 
   return (
-    <div className="min-h-screen mx-auto p-10 space-y-8 bg-gradient-to-b from-white to-yellow-100 shadow-lg">
+    <div className="min-h-screen mx-auto p-10 space-y-8 bg-white shadow-lg">
       <button
         onClick={() => navigate("/areas")}
         className="text-yellow-600 hover:text-yellow-800 font-semibold text-sm mb-6 flex items-center gap-2"

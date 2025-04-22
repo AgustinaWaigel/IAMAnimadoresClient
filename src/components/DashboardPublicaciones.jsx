@@ -5,7 +5,14 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalPublicacion from "../components/ModalPublicacion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { FileText, ImageIcon, Eye, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  FileText,
+  ImageIcon,
+  Eye,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 export default function DashboardPublicaciones() {
   const { user } = useAuth();
@@ -153,7 +160,7 @@ export default function DashboardPublicaciones() {
           <motion.button
             onClick={() => setMostrarFormulario(!mostrarFormulario)}
             className={`px-6 py-2 rounded-full font-semibold ${
-              mostrarFormulario ? "bg-yellow-500" : "bg-yellow-500"
+              mostrarFormulario ? "bg-red-700" : "bg-red-700"
             } text-white transition`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -257,81 +264,81 @@ export default function DashboardPublicaciones() {
         </p>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  {publicacionesFiltradas.map((post) => (
-    <motion.li
-      key={post._id}
-      whileHover={{ scale: 1.02 }}
-      onClick={() => setModalPost(post)}
-      className="relative bg-white/80 backdrop-blur-lg rounded-3xl shadow-md hover:shadow-2xl transition-all border border-gray-200 flex flex-col justify-between overflow-hidden"
-    >
-      {/* Imagen arriba (solo si es imagen) */}
-      {post.tipoArchivo === "imagen" && post.archivoUrl && (
-        <img
-          src={post.archivoUrl}
-          alt="Vista previa"
-          className="w-full h-48 object-cover"
-        />
-      )}
+          {publicacionesFiltradas.map((post) => (
+            <motion.li
+              key={post._id}
+              whileHover={{ scale: 1.02 }}
+              onClick={() => setModalPost(post)}
+              className="relative bg-white/80 backdrop-blur-lg rounded-3xl shadow-md hover:shadow-2xl transition-all border border-gray-200 flex flex-col justify-between overflow-hidden cursor-pointer"
+            >
+              {/* Imagen arriba (solo si es imagen) */}
+              {post.tipoArchivo === "imagen" && post.archivoUrl && (
+                <img
+                  src={post.archivoUrl}
+                  alt="Vista previa"
+                  className=" h-full object-cover"
+                />
+              )}
 
-      {/* Contenido principal */}
-      <div className="flex flex-col flex-grow p-4 space-y-4">
-        {/* Título (categoría) */}
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold text-red-700 line-clamp-2">
-            {post.categoria}
-          </h3>
+              {/* Contenido principal */}
+              <div className="flex flex-col flex-grow p-4 space-y-4">
+                {/* Título (categoría) */}
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-bold text-red-700 line-clamp-2">
+                    {post.categoria}
+                  </h3>
 
-          <span
-            className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
-              post.tipoArchivo === "imagen"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {post.tipoArchivo === "imagen" ? (
-              <>
-                <ImageIcon size={14} /> Imagen
-              </>
-            ) : (
-              <>
-                <FileText size={14} /> Archivo
-              </>
-            )}
-          </span>
-        </div>
+                  <span
+                    className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
+                      post.tipoArchivo === "imagen"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {post.tipoArchivo === "imagen" ? (
+                      <>
+                        <ImageIcon size={14} /> Imagen
+                      </>
+                    ) : (
+                      <>
+                        <FileText size={14} /> Archivo
+                      </>
+                    )}
+                  </span>
+                </div>
 
-        {/* Contenido del post */}
-        {post.contenido && (
-          <p className="text-gray-600 text-sm whitespace-pre-wrap line-clamp-3">
-            {post.contenido}
-          </p>
-        )}
+                {/* Contenido del post */}
+                {post.contenido && (
+                  <p className="text-gray-600 text-sm whitespace-pre-wrap line-clamp-3">
+                    {post.contenido}
+                  </p>
+                )}
 
-        {/* Botón para ver el archivo */}
-        {post.archivoUrl && post.tipoArchivo !== "texto" && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(post.archivoUrl, "_blank");
-            }}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-2"
-          >
-            <Eye className="w-5 h-5" />
-            Ver {post.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
-          </button>
-        )}
+                {/* Botón para ver el archivo */}
+                {post.archivoUrl && post.tipoArchivo !== "texto" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(post.archivoUrl, "_blank");
+                    }}
+                    className="bg-gray-400 hover:bg-gray-600 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-2"
+                  >
+                    <Eye className="w-5 h-5" />
+                    Ver {post.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+                  </button>
+                )}
 
-        {/* Footer: fecha */}
-        <div className="flex items-center text-xs text-gray-700 pt-4">
-          <span className="flex items-center gap-1">
-            <Calendar size={14} />
-            {new Date(post.createdAt).toLocaleDateString()}</span>
-        </div>
-      </div>
-    </motion.li>
-  ))}
-</ul>
-
+                {/* Footer: fecha */}
+                <div className="flex items-center text-xs text-gray-700 pt-4">
+                  <span className="flex items-center gap-1">
+                    <Calendar size={14} />
+                    {new Date(post.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
       )}
 
       {modalPost && (

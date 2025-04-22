@@ -48,13 +48,13 @@ export default function Login() {
         onSubmit={handleLogin}
         className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md"
       >
-        <h2 className="text-2xl font-bold text-center mb-6 text-yellow-400">
+        <h2 className="text-2xl font-bold text-center mb-6 text-red-700">
           Iniciar Sesión
         </h2>
 
         {/* ✅ Mostrar mensaje si vino el parámetro de verificado */}
         {verificado && (
-          <div className="bg-green-100 text-green-800 p-3 rounded mb-4 text-sm text-center border border-green-400">
+          <div className="bg-green-100 text-green-800 p-3 rounded mb-4 text-sm text-center border border-green-700">
             ✅ Tu correo fue verificado con éxito. Ahora podés iniciar sesión.
           </div>
         )}
@@ -97,7 +97,7 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full bg-yellow-400 text-black py-2 rounded-md hover:bg-green-600 hover:text-white transition-colors"
+          className="w-full bg-red-700 text-white py-2 rounded-md hover:bg-gray-600 hover:text-white transition-colors"
         >
           Ingresar
         </button>
@@ -108,14 +108,14 @@ export default function Login() {
 
         <p className="text-center text-sm mt-4 text-gray-600">
           ¿No tenés cuenta?{" "}
-          <Link to="/register" className="text-yellow-400 hover:underline">
+          <Link to="/register" className="text-red-700 hover:underline">
             Registrate
           </Link>
         </p>
 
         <p className="text-center text-sm mt-2 text-gray-600">
           ¿Olvidaste tu contraseña?{" "}
-          <Link to="/recuperar" className="text-blue-600 hover:underline">
+          <Link to="/recuperar" className="text-gray-600 hover:underline">
             Recuperala
           </Link>
         </p>

@@ -203,7 +203,7 @@ export default function RecursosEdad() {
                       <div className="mt-4 flex flex-col space-y-2">
                         <button
                           onClick={() => abrirArchivo(file)}
-                          className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
+                          className="bg-gray-400 hover:bg-gray-500 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
                         >
                                 <Eye className="w-5 h-5" />
                           Ver{" "}
@@ -234,7 +234,7 @@ export default function RecursosEdad() {
           <div className="text-right">
             <button
               onClick={() => setMostrarFormulario(!mostrarFormulario)}
-              className="bg-yellow-400 text-white font-semibold px-4 py-2 rounded hover:bg-yellow-500 transition flex items-center gap-2 justify-center"
+              className="bg-gray-400 text-white font-semibold px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2 justify-center"
             >
               {mostrarFormulario ? (
                 "Cerrar formulario"
@@ -252,7 +252,7 @@ export default function RecursosEdad() {
               onSubmit={handleUpload}
               className="bg-gray-100 p-4 rounded shadow space-y-4 mt-4"
             >
-              <h3 className="text-lg font-semibold text-yellow-400">
+              <h3 className="text-lg font-semibold text-red-700">
                 Subir nuevo recurso
               </h3>
 
@@ -279,9 +279,9 @@ export default function RecursosEdad() {
                   className="w-full border rounded p-2"
                 >
                   <option value="pdf">PDF</option>
-                  <option value="documento">Documento Word</option>
+                  <option value="documento">Documento</option>
                   <option value="imagen">Imagen</option>
-                  <option value="otro">Otro</option>
+                  <option value="otro">Texto</option>
                 </select>
               </div>
 
@@ -308,7 +308,7 @@ export default function RecursosEdad() {
 
               <button
                 type="submit"
-                className="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-700"
+                className="bg-red-700 text-white px-4 py-2 rounded hover:bg-yellow-700"
               >
                 Subir recurso
               </button>
