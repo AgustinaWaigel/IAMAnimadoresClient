@@ -15,7 +15,7 @@ const Inicio = () => {
         </motion.h1>
 
         <motion.img
-          src="/logo año diocesano.png"
+          src="/logo-año-diocesano.webp"
           alt="Niña misionera"
           className="w-72 md:w-96"
           initial={{ opacity: 0, y: 30 }}
@@ -43,7 +43,7 @@ const Inicio = () => {
       </motion.p>
 
       <motion.img
-        src="/imagenes/imagenabrazo.png"
+        src="imagenabrazo (1).webp"
         alt="Bienvenida"
         className="md:w-80 mb-10"
         initial={{ opacity: 0, scale: 0.8 }}
