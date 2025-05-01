@@ -52,7 +52,7 @@ const Inicio = () => {
       />
 
       <motion.div
-        className="flex gap-4"
+       className="flex flex-col md:flex-row gap-4 justify-center items-center mb-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.8 }}
