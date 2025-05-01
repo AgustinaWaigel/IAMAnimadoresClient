@@ -26,6 +26,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Informacion from "./pages/Informacion";
 import FormatoEscuelaConJesus from "./pages/FormatoEscuelaConJesus";
+import ScrollToTop from "./components/ScrollToTop";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -49,53 +50,63 @@ export default function App() {
       <Navbar />
 
       <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Navigate to="/inicio" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/recuperar" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/calendario" element={<Calendario />} />
-          <Route path="/inicio" element={<Inicio />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/recursos/:edad" element={<RecursosEdad />} />
-          <Route path="/informacion" element={<Informacion />} />
+      <ScrollToTop />
+          <Routes>
 
-          <Route path="/areas" element={<Areas />} />
+            <Route path="/" element={<Navigate to="/inicio" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/recuperar" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/calendario" element={<Calendario />} />
+            <Route path="/inicio" element={<Inicio />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/recursos/:edad" element={<RecursosEdad />} />
+            <Route path="/informacion" element={<Informacion />} />
 
-          <Route path="/noticias" element={<Noticias />} />
+            <Route path="/areas" element={<Areas />} />
 
-          <Route path="/comunicacion" element={<Comunicacion />} />
+            <Route path="/noticias" element={<Noticias />} />
 
-          <Route path="/logistica" element={<Logistica />} />
+            <Route path="/comunicacion" element={<Comunicacion />} />
 
-          <Route path="/formacion" element={<Formacion />} />
+            <Route path="/logistica" element={<Logistica />} />
 
-          <Route path="/espiritualidad" element={<Espiritualidad />} />
+            <Route path="/formacion" element={<Formacion />} />
 
-          <Route path="/animacion" element={<Animacion />} />
+            <Route path="/espiritualidad" element={<Espiritualidad />} />
 
-          <Route path="/formatoescuelaconjesus" element={<FormatoEscuelaConJesus />} />
+            <Route path="/animacion" element={<Animacion />} />
 
-          <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
+            <Route
+              path="/formatoescuelaconjesus"
+              element={<FormatoEscuelaConJesus />}
+            />
 
-          <Route
-            path="/paneladministracion"
-            element={<PanelAdministracion />}
-          />
+            <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
 
-          <Route path="/recursos" element={<Recursos />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route
+              path="/paneladministracion"
+              element={<PanelAdministracion />}
+            />
+
+            <Route path="/recursos" element={<Recursos />} />
+            <Route path="*" element={<NotFound />} />
+            
+          </Routes>
+        
       </main>
 
       <footer className="mt-auto w-full py-4 text-center text-sm text-gray-500 border-t">
         <p>© {new Date().getFullYear()} App para Animadores</p>
         <p className="text-xs mt-1">Siempre hagamos todo con ❤️</p>
         <div className="flex justify-center gap-4 mt-2 text-blue-600">
-          <a href="https://www.youtube.com/channel/UCShR66tuvm-N-I5ZUZ6Oo6Q" className="hover:underline">
+          <a
+            href="https://www.youtube.com/channel/UCShR66tuvm-N-I5ZUZ6Oo6Q"
+            className="hover:underline"
+          >
             Youtube
           </a>
           <a
