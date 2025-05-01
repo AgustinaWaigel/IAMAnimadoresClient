@@ -23,6 +23,10 @@ export default function RecursosEdad() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [fileKey, setFileKey] = useState(Date.now());
   const [tipoArchivoForm, setTipoArchivoForm] = useState("pdf"); // 👈 tipo por defecto
+  const [busqueda, setBusqueda] = useState("");
+const [categoriaFiltro, setCategoriaFiltro] = useState("");
+
+
   useEffect(() => {
     const fetchRecursos = async () => {
       try {
@@ -142,22 +146,52 @@ export default function RecursosEdad() {
       <h1 className="text-3xl font-bold text-red-700 capitalize">
         Recursos para {edad}
       </h1>
-
-      {categorias.map(
-        (cat) =>
-          (archivos[cat] || []).length > 0 && (
+  
+      {/* Filtros */}
+      <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-6">
+        <input
+          type="text"
+          placeholder="🔍 Buscar en objetivo o nombre"
+          className="w-full md:w-1/2 border p-2 rounded-md"
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+        <select
+          value={categoriaFiltro}
+          onChange={(e) => setCategoriaFiltro(e.target.value)}
+          className="w-full md:w-1/3 border p-2 rounded-md"
+        >
+          <option value="">Todas las categorías</option>
+          {categorias.map((c) => (
+            <option key={c} value={c}>
+              {c.charAt(0).toUpperCase() + c.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+  
+      {/* Listado filtrado */}
+      {categorias
+        .filter((cat) => categoriaFiltro === "" || categoriaFiltro === cat)
+        .map((cat) => {
+          const filtrados = (archivos[cat] || []).filter(
+            (file) =>
+              file.objetivo?.toLowerCase().includes(busqueda.toLowerCase()) ||
+              file.nombre?.toLowerCase().includes(busqueda.toLowerCase())
+          );
+          if (filtrados.length === 0) return null;
+  
+          return (
             <div key={cat}>
-              <h2 className="text-xl font-semibold text-red-700 capitalize mb-2 ">
+              <h2 className="text-xl font-semibold text-red-700 capitalize mb-2">
                 {cat}
               </h2>
               <div className="grid gap-4 md:grid-cols-2">
-                {(archivos[cat] || []).map((file) => (
+                {filtrados.map((file) => (
                   <motion.div
                     key={file._id || file.nombre}
                     whileHover={{ scale: 1.02 }}
-                    className="bg-gray-100 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl transition-all flex flex-col justify-between"
+                    className="bg-gray-100 rounded-2xl shadow-lg border hover:shadow-2xl transition-all flex flex-col justify-between"
                   >
-                    {/* Vista previa SOLO para imágenes */}
                     {file.tipoArchivo === "imagen" && (
                       <img
                         src={file.url}
@@ -165,8 +199,6 @@ export default function RecursosEdad() {
                         className="w-full object-cover"
                       />
                     )}
-
-                    {/* Contenido */}
                     <div className="p-4 flex flex-col justify-between flex-grow">
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -191,29 +223,25 @@ export default function RecursosEdad() {
                             )}
                           </span>
                         </div>
-
                         {file.objetivo && (
                           <p className="text-gray-600 text-xs italic">
                             🎯 {file.objetivo}
                           </p>
                         )}
                       </div>
-
-                      {/* Botones */}
                       <div className="mt-4 flex flex-col space-y-2">
                         <button
                           onClick={() => abrirArchivo(file)}
-                          className="bg-gray-400 hover:bg-gray-500 text-white font-semibold text-sm rounded-lg p-2 flex items-center justify-center gap-1"
+                          className="bg-gray-400 hover:bg-gray-500 text-white text-sm rounded-lg p-2 flex items-center justify-center gap-1"
                         >
-                                <Eye className="w-5 h-5" />
+                          <Eye className="w-5 h-5" />
                           Ver{" "}
                           {file.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
                         </button>
-
                         {user && (
                           <button
                             onClick={() => handleDelete(file._id, cat)}
-                            className="bg-red-100 text-red-600 text-xs rounded-lg py-1 mt-2 hover:bg-red-200 transition flex items-center justify-center gap-1"
+                            className="bg-red-100 text-red-600 text-xs rounded-lg py-1 mt-2 hover:bg-red-200 flex items-center justify-center gap-1"
                           >
                             <Trash2 size={16} /> Eliminar
                           </button>
@@ -224,9 +252,9 @@ export default function RecursosEdad() {
                 ))}
               </div>
             </div>
-          )
-      )}
-
+          );
+        })}
+  
       {/* Formulario de subida */}
       {user && (
         <>
@@ -246,7 +274,7 @@ export default function RecursosEdad() {
               )}
             </button>
           </div>
-
+  
           {mostrarFormulario && (
             <form
               onSubmit={handleUpload}
@@ -255,7 +283,7 @@ export default function RecursosEdad() {
               <h3 className="text-lg font-semibold text-red-700">
                 Subir nuevo recurso
               </h3>
-
+  
               <div>
                 <label className="block mb-1">Categoría:</label>
                 <select
@@ -270,7 +298,7 @@ export default function RecursosEdad() {
                   ))}
                 </select>
               </div>
-
+  
               <div>
                 <label className="block mb-1">Tipo de archivo:</label>
                 <select
@@ -284,7 +312,7 @@ export default function RecursosEdad() {
                   <option value="otro">Texto</option>
                 </select>
               </div>
-
+  
               <div>
                 <label className="block mb-1">Objetivo o descripción:</label>
                 <input
@@ -294,7 +322,7 @@ export default function RecursosEdad() {
                   className="w-full border rounded p-2"
                 />
               </div>
-
+  
               <div>
                 <label className="block mb-1">Archivo:</label>
                 <input
@@ -305,7 +333,7 @@ export default function RecursosEdad() {
                   className="w-full"
                 />
               </div>
-
+  
               <button
                 type="submit"
                 className="bg-red-700 text-white px-4 py-2 rounded hover:bg-yellow-700"
@@ -318,4 +346,4 @@ export default function RecursosEdad() {
       )}
     </div>
   );
-}
+}  

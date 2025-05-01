@@ -27,7 +27,7 @@ export default function Recursos() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        Encontrá distintos encuentros realizados para inspirarte y compartir ideas misioneras.
+        La idea principal de esta sección es que podamos compartir los encuentros que armamos con amor todos los sabados, para que entre animadores podamos compartir ideas y recursos.
       </motion.p>
 
       <section className="space-y-8">

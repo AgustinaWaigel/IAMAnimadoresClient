@@ -153,6 +153,7 @@ export default function Calendario() {
       {/* 🎯 Corregimos el contenedor */}
       <div className="w-full overflow-hidden">
         <Calendar
+          culture="es"
           className="rounded-lg bg-white shadow-lg p-2 md:p-4 w-full"
           localizer={localizer}
           events={eventos}
@@ -168,7 +169,11 @@ export default function Calendario() {
           components={{
             event: CustomEvent,
             toolbar: (props) => (
-              <CustomToolbar {...props} setVistaActual={setVistaActual} />
+              <CustomToolbar
+                {...props}
+                onView={props.onView}
+                vistaActual={vistaActual} // ✅ Lo pasás
+              />
             ),
           }}
           onSelectEvent={(event) => {
