@@ -25,6 +25,7 @@ import Logistica from "./pages/Logistica";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Informacion from "./pages/Informacion";
+import FormatoEscuelaConJesus from "./pages/FormatoEscuelaConJesus";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -76,8 +77,9 @@ export default function App() {
 
           <Route path="/animacion" element={<Animacion />} />
 
-          <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
+          <Route path="/formatoescuelaconjesus" element={<FormatoEscuelaConJesus />} />
 
+          <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
 
           <Route
             path="/paneladministracion"

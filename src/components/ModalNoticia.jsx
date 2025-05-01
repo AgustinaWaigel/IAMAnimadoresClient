@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { api } from "../lib/api";
+import { Pencil, Trash2 } from "lucide-react";
 
 export default function ModalNoticia({
   noticia,
@@ -11,7 +12,7 @@ export default function ModalNoticia({
 }) {
   if (!noticia) return null;
 
-  const esImagen = noticia.archivoUrl?.match(/\.(jpg|jpeg|png|gif)$/i);
+  const esImagen = noticia.archivoUrl?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
   const esPDF = noticia.archivoUrl?.match(/\.pdf$/i);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -30,11 +31,12 @@ export default function ModalNoticia({
       const res = await fetch(api(`/noticias/${noticia._id}`), {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${user?.token}`,
         },
         body: formData,
-        credentials: 'include',
+        credentials: "include",
       });
+      
 
       const data = await res.json();
       if (data.success) {
@@ -50,33 +52,28 @@ export default function ModalNoticia({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <motion.div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-y-auto max-h-[90vh] relative p-6"
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
+        className="bg-white rounded-xl shadow-xl w-full max-w-xl overflow-y-auto max-h-[90vh] relative p-6"
       >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl"
-        >
-          ✖
-        </button>
+        <button onClick={onClose} className="absolute top-2 right-2 text-gray-400 hover:text-black text-xl">✕</button>
 
-        {/* Edición */}
         {isEditing ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <input
-              type="text"
-              className="w-full border border-gray-300 rounded p-3 text-lg"
               value={nuevoTitulo}
               onChange={(e) => setNuevoTitulo(e.target.value)}
+              className="w-full border px-3 py-2 rounded-md text-lg"
+              placeholder="Título"
             />
             <textarea
-              className="w-full border border-gray-300 rounded p-3 text-base h-32"
               value={nuevoContenido}
               onChange={(e) => setNuevoContenido(e.target.value)}
+              className="w-full border px-3 py-2 rounded-md h-32 text-sm"
+              placeholder="Contenido"
             />
             <input
               type="file"
@@ -84,16 +81,16 @@ export default function ModalNoticia({
               className="text-sm"
             />
 
-            <div className="flex justify-end gap-4 mt-4">
+            <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={handleUpdate}
-                className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-semibold"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-md text-sm"
               >
                 Guardar
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-lg font-semibold"
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-1.5 rounded-md text-sm"
               >
                 Cancelar
               </button>
@@ -101,57 +98,51 @@ export default function ModalNoticia({
           </div>
         ) : (
           <>
-            <h2 className="text-3xl font-extrabold text-yellow-400 mb-4 text-center">
-              {noticiaActual.titulo}
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{noticiaActual.titulo}</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Publicado el {new Date(noticiaActual.createdAt).toLocaleDateString()}
+            </p>
 
             {esImagen && (
               <img
                 src={noticiaActual.archivoUrl}
                 alt="Noticia"
-                className="rounded-xl w-full max-h-[400px] object-cover mb-6"
+                className="rounded-md w-full mb-4 max-h-[300px] object-cover"
               />
             )}
 
             {esPDF && (
               <a
-                href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                  noticiaActual.archivoUrl
-                )}&embedded=true`}
+                href={noticiaActual.archivoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-blue-600 hover:underline text-center mb-6"
+                className="text-blue-600 text-sm underline block mb-4 text-center"
               >
-                📄 Ver archivo PDF
+                📄 Ver documento PDF
               </a>
             )}
 
             {noticiaActual.contenido && (
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {noticiaActual.contenido}
-              </p>
+              <p className="text-gray-700 text-sm mb-6">{noticiaActual.contenido}</p>
             )}
 
-            <p className="text-sm text-gray-400 text-center mb-6">
-              Publicado el {new Date(noticiaActual.createdAt).toLocaleDateString()}
-            </p>
-
             {user?.rol === "admin" && (
-              <div className="flex justify-end gap-4">
+              <div className="flex justify-end gap-3 mt-4">
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"
+                  className="text-gray-600 hover:text-blue-600"
+                  title="Editar"
                 >
-                  Editar
+                  <Pencil size={20} />
                 </button>
                 <button
                   onClick={() => {
-                    if (window.confirm("¿Eliminar esta noticia?"))
-                      onDelete(noticiaActual._id);
+                    if (confirm("¿Eliminar esta noticia?")) onDelete(noticiaActual._id);
                   }}
-                  className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg font-semibold"
+                  className="text-gray-600 hover:text-red-600"
+                  title="Eliminar"
                 >
-                  Eliminar
+                  <Trash2 size={20} />
                 </button>
               </div>
             )}

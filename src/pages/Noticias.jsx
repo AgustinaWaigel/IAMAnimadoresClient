@@ -4,7 +4,6 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
 import { FileText, ImageIcon, File, Text, Trash2 } from "lucide-react";
-import CarruselNoticias from "../components/CarruselNoticias";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -180,7 +179,6 @@ export default function Noticias() {
         <p className="text-center text-gray-500 animate-pulse">Cargando...</p>
       ) : (
         <>
-          <CarruselNoticias noticias={noticiasFiltradas} />
           <SeccionNoticias
             titulo="Últimas Noticias 🗞️"
             noticias={noticiasFiltradas}
@@ -250,91 +248,59 @@ function NoticiaCard({ noticia, onClick, onDelete, user }) {
 
   return (
     <motion.div
-      onClick={onClick}
-      whileHover={{ scale: 1.03 }}
-      className="break-inside-avoid rounded-2xl bg-gray-100 border shadow-md p-4 flex flex-col space-y-4 hover:shadow-xl transition duration-300 cursor-pointer"
+  onClick={onClick}
+  whileHover={{ scale: 1.01 }}
+  className="break-inside-avoid rounded-xl bg-white border border-gray-200 shadow-sm p-5 hover:shadow-md transition cursor-pointer flex flex-col"
+>
+  {/* Imagen destacada */}
+  {esImagen && noticia.archivoUrl && (
+    <img
+      src={noticia.archivoUrl}
+      alt="Imagen de la noticia"
+      className="w-full h-48 object-cover rounded-md mb-4"
+    />
+  )}
+
+  {/* Título y fecha */}
+  <h3 className="text-xl font-semibold text-gray-800 mb-1">{noticia.titulo}</h3>
+  <p className="text-xs text-gray-500 mb-2">
+    Publicado el {new Date(noticia.createdAt).toLocaleDateString()}
+  </p>
+
+  {/* Contenido breve */}
+  {noticia.contenido && (
+    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{noticia.contenido}</p>
+  )}
+
+  {/* Botón ver archivo si es necesario */}
+  {esArchivo && noticia.archivoUrl && (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        window.open(noticia.archivoUrl, "_blank");
+      }}
+      className="self-start text-sm text-blue-600 font-medium hover:underline"
     >
-      {/* Imagen arriba si es una imagen */}
-      {esImagen && noticia.archivoUrl && (
-        <img
-          src={noticia.archivoUrl}
-          alt="Vista previa"
-          className="w-full object-cover"
-        />
-      )}
+      Ver documento
+    </button>
+  )}
 
-      {/* Contenido */}
-      <div className="flex flex-col space-y-3 p-4">
-        {/* Título */}
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-2xl text-red-700">{noticia.titulo}</h3>
+  {/* Acciones admin */}
+  {user?.rol === "admin" && (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        if (confirm("¿Estás seguro de que querés eliminar esta publicación?")) {
+          onDelete(noticia._id);
+        }
+      }}
+      className="mt-4 text-xs text-red-500 hover:underline self-start"
+    >
+      <Trash2 size={14} className="inline mr-1" />
+      Eliminar
+    </button>
+  )}
+</motion.div>
 
-          {/* Tipo de archivo */}
-          <span
-            className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
-              noticia.tipoArchivo === "imagen"
-                ? "bg-green-100 text-green-700"
-                : noticia.tipoArchivo === "texto"
-                ? "bg-blue-100 text-blue-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {esImagen ? (
-              <>
-                <ImageIcon size={14} /> Imagen
-              </>
-            ) : esTexto ? (
-              <>
-                <Text size={14} /> Texto
-              </>
-            ) : (
-              <>
-                <FileText size={14} /> Archivo
-              </>
-            )}
-          </span>
-        </div>
-
-        {/* Contenido breve */}
-        {noticia.contenido && (
-          <p className="text-gray-600 text-base">{noticia.contenido}</p>
-        )}
-
-        {/* Si es archivo, mostrar botón */}
-        {esArchivo && noticia.archivoUrl && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(noticia.archivoUrl, "_blank");
-            }}
-            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition"
-          >
-            <File className="w-5 h-5 inline-block" /> Ver Documento
-          </button>
-        )}
-        {user?.rol === "admin" && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (
-                confirm(
-                  "¿Estás seguro de que querés eliminar esta publicación?"
-                )
-              ) {
-                onDelete(noticia._id); // ✅ usa la función del componente padre
-              }
-            }}
-            className="bg-red-100 text-red-600 text-xs rounded-lg py-1 mt-2 hover:bg-red-200 transition flex items-center justify-center gap-1"
-          >
-            <Trash2 size={16} /> Eliminar
-          </button>
-        )}
-
-        {/* Footer */}
-        <div className="text-xs text-gray-400 mt-auto pt-2">
-          Publicado el {new Date(noticia.createdAt).toLocaleDateString()}
-        </div>
-      </div>
-    </motion.div>
   );
 }
