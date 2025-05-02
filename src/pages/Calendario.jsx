@@ -26,23 +26,26 @@ export default function Calendario() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
   const [mostrandoModal, setMostrandoModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEventos = async () => {
+      setLoading(true); // <- al principio
+  
       try {
         const headers = user?.token
           ? { Authorization: `Bearer ${user.token}` }
           : {};
-
+  
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventos`, {
           headers,
         });
-
+  
         if (res.status === 401) {
           console.warn("Usuario no autorizado para ver eventos.");
           return;
         }
-
+  
         const data = await res.json();
         setEventos(
           data.map((e) => ({
@@ -53,11 +56,14 @@ export default function Calendario() {
         );
       } catch (err) {
         console.error("Error cargando eventos:", err);
+      } finally {
+        setLoading(false); // <- al final
       }
     };
-
+  
     fetchEventos();
   }, [user?.token]);
+  
 
   const handleCrearEvento = async (evento) => {
     if (!user?.token) {
@@ -195,6 +201,11 @@ export default function Calendario() {
             },
           })}
         />
+        {!loading && eventos.length === 0 && (
+          <p className="text-center text-gray-500 mt-4">
+            No hay eventos por el momento.
+          </p>
+        )}
       </div>
 
       {/* Modales */}

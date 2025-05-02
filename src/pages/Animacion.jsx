@@ -16,14 +16,21 @@ export default function Animacion() {
   const cargarPosts = async () => {
     try {
       const res = await fetch(api("/posts?area=animacion"));
+  
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+  
       const data = await res.json();
       setPosts(data);
     } catch (err) {
       console.error("❌ Error al cargar animaciones:", err);
+      setPosts([]); // evita que quede el loader colgado
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     cargarPosts();

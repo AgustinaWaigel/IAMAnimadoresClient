@@ -39,8 +39,33 @@ export default function DashboardPublicaciones() {
   };
 
   useEffect(() => {
-    if (user) cargarPosts();
+    const cargar = async () => {
+      try {
+        const res = await fetch(api("/muro"), {
+          headers: user?.token
+            ? { Authorization: `Bearer ${user.token}` }
+            : {},
+        });
+        const data = await res.json();
+        if (data.success) {
+          setPosts(
+            data.posts.map((post) => ({
+              ...post,
+              likedByUser: post.likedBy?.includes(user?._id),
+              likes: post.likedBy?.length || 0,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Error al cargar publicaciones:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    cargar();
   }, [user]);
+  
 
   const topPosts = [...posts]
     .filter((p) => p.likes > 0)

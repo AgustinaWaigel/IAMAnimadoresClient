@@ -16,14 +16,21 @@ export default function Espiritualidad() {
   const cargarPosts = async () => {
     try {
       const res = await fetch(api("/posts?area=espiritualidad"));
+  
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
+      }
+  
       const data = await res.json();
       setPosts(data);
     } catch (err) {
       console.error("❌ Error al cargar espiritualidad:", err);
+      setPosts([]); // importante para evitar que quede colgado
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     cargarPosts();

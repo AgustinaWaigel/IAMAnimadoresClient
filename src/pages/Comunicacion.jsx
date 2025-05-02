@@ -16,14 +16,21 @@ export default function Comunicacion() {
   const cargarComunicados = async () => {
     try {
       const res = await fetch(api("/posts?area=comunicacion"));
+  
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+  
       const data = await res.json();
       setComunicados(data);
     } catch (err) {
       console.error("❌ Error al cargar comunicados:", err);
+      setComunicados([]); // o un estado de error si querés mostrar algo
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     cargarComunicados();
