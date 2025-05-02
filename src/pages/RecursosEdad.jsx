@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { Trash2, FileText, ImageIcon, Upload, Eye } from "lucide-react";
+import Loader from "../components/Loader";
 
 const categorias = [
   "catequesis",
@@ -27,31 +28,36 @@ export default function RecursosEdad() {
 const [categoriaFiltro, setCategoriaFiltro] = useState("");
 
 
-  useEffect(() => {
-    const fetchRecursos = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`
-        );
-        if (!res.ok) throw new Error("No se pudieron obtener los recursos");
+useEffect(() => {
+  const fetchRecursos = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`
+      );
 
-        const data = await res.json();
-
-        const agrupados = {};
-        for (const cat of categorias) {
-          agrupados[cat] = data.filter((r) => r.categoria === cat);
-        }
-
-        setArchivos(agrupados);
-      } catch (err) {
-        console.error("❌ Error al cargar recursos:", err);
-      } finally {
-        setIsLoading(false);
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
       }
-    };
 
-    fetchRecursos();
-  }, [edad]);
+      const data = await res.json();
+
+      const agrupados = {};
+      for (const cat of categorias) {
+        agrupados[cat] = data.filter((r) => r.categoria === cat);
+      }
+
+      setArchivos(agrupados);
+    } catch (err) {
+      console.error("❌ Error al cargar recursos:", err);
+      setArchivos({}); // <- para evitar render vacío
+    } finally {
+      setIsLoading(false); // <- garantiza salida del loading
+    }
+  };
+
+  fetchRecursos();
+}, [edad]);
+
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -138,7 +144,14 @@ const [categoriaFiltro, setCategoriaFiltro] = useState("");
   };
 
   if (isLoading) {
-    return <p className="text-center text-gray-500">Cargando recursos...</p>;
+    return <Loader />;
+  }
+  if (!isLoading && Object.values(archivos).every(arr => arr.length === 0)) {
+    return (
+      <p className="text-center text-gray-400 mt-6">
+        No hay recursos disponibles para esta edad.
+      </p>
+    );
   }
 
   return (

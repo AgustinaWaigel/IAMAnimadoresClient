@@ -5,6 +5,7 @@ import { api } from "../lib/api";
 import PostCard from "../components/PostCard";
 import Insertar from "../components/Insertar";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 export default function Comunicacion() {
   const { user } = useAuth();
@@ -122,9 +123,7 @@ export default function Comunicacion() {
       </h2>
 
       {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
+        <Loader />
       ) : comunicados.length === 0 ? (
         <p className="text-center text-gray-400 mt-6">
           Todavía no hay comunicados. 📭
