@@ -25,39 +25,37 @@ export default function RecursosEdad() {
   const [fileKey, setFileKey] = useState(Date.now());
   const [tipoArchivoForm, setTipoArchivoForm] = useState("pdf"); // 👈 tipo por defecto
   const [busqueda, setBusqueda] = useState("");
-const [categoriaFiltro, setCategoriaFiltro] = useState("");
+  const [categoriaFiltro, setCategoriaFiltro] = useState("");
 
+  useEffect(() => {
+    const fetchRecursos = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`
+        );
 
-useEffect(() => {
-  const fetchRecursos = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/recursos/por-edad/${edad}`
-      );
+        if (!res.ok) {
+          throw new Error(`Error ${res.status}: ${res.statusText}`);
+        }
 
-      if (!res.ok) {
-        throw new Error(`Error ${res.status}: ${res.statusText}`);
+        const data = await res.json();
+
+        const agrupados = {};
+        for (const cat of categorias) {
+          agrupados[cat] = data.filter((r) => r.categoria === cat);
+        }
+
+        setArchivos(agrupados);
+      } catch (err) {
+        console.error("❌ Error al cargar recursos:", err);
+        setArchivos({}); // <- para evitar render vacío
+      } finally {
+        setIsLoading(false); // <- garantiza salida del loading
       }
+    };
 
-      const data = await res.json();
-
-      const agrupados = {};
-      for (const cat of categorias) {
-        agrupados[cat] = data.filter((r) => r.categoria === cat);
-      }
-
-      setArchivos(agrupados);
-    } catch (err) {
-      console.error("❌ Error al cargar recursos:", err);
-      setArchivos({}); // <- para evitar render vacío
-    } finally {
-      setIsLoading(false); // <- garantiza salida del loading
-    }
-  };
-
-  fetchRecursos();
-}, [edad]);
-
+    fetchRecursos();
+  }, [edad]);
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -146,20 +144,20 @@ useEffect(() => {
   if (isLoading) {
     return <Loader />;
   }
-  if (!isLoading && Object.values(archivos).every(arr => arr.length === 0)) {
-    return (
-      <p className="text-center text-gray-400 mt-6">
-        No hay recursos disponibles para esta edad.
-      </p>
-    );
-  }
+  const noHayRecursos =
+    !isLoading && Object.values(archivos).every((arr) => arr.length === 0);
 
   return (
     <div className="mx-auto p-6 space-y-10">
       <h1 className="text-3xl font-bold text-red-700 capitalize">
         Recursos para {edad}
       </h1>
-  
+      {noHayRecursos && (
+        <p className="text-center text-gray-400">
+          No hay recursos disponibles para esta edad.
+        </p>
+      )}
+
       {/* Filtros */}
       <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-6">
         <input
@@ -181,7 +179,7 @@ useEffect(() => {
           ))}
         </select>
       </div>
-  
+
       {/* Listado filtrado */}
       {categorias
         .filter((cat) => categoriaFiltro === "" || categoriaFiltro === cat)
@@ -192,7 +190,7 @@ useEffect(() => {
               file.nombre?.toLowerCase().includes(busqueda.toLowerCase())
           );
           if (filtrados.length === 0) return null;
-  
+
           return (
             <div key={cat}>
               <h2 className="text-xl font-semibold text-red-700 capitalize mb-2">
@@ -267,9 +265,13 @@ useEffect(() => {
             </div>
           );
         })}
-  
+
       {/* Formulario de subida */}
-      {user && (
+      {!user ? (
+        <p className="text-center text-red-600 font-semibold mt-8">
+          Iniciá sesión para subir recursos.
+        </p>
+      ) : (
         <>
           <hr className="my-8" />
           <div className="text-right">
@@ -287,7 +289,7 @@ useEffect(() => {
               )}
             </button>
           </div>
-  
+
           {mostrarFormulario && (
             <form
               onSubmit={handleUpload}
@@ -296,7 +298,7 @@ useEffect(() => {
               <h3 className="text-lg font-semibold text-red-700">
                 Subir nuevo recurso
               </h3>
-  
+
               <div>
                 <label className="block mb-1">Categoría:</label>
                 <select
@@ -311,7 +313,7 @@ useEffect(() => {
                   ))}
                 </select>
               </div>
-  
+
               <div>
                 <label className="block mb-1">Tipo de archivo:</label>
                 <select
@@ -325,7 +327,7 @@ useEffect(() => {
                   <option value="otro">Texto</option>
                 </select>
               </div>
-  
+
               <div>
                 <label className="block mb-1">Objetivo o descripción:</label>
                 <input
@@ -335,7 +337,7 @@ useEffect(() => {
                   className="w-full border rounded p-2"
                 />
               </div>
-  
+
               <div>
                 <label className="block mb-1">Archivo:</label>
                 <input
@@ -346,7 +348,7 @@ useEffect(() => {
                   className="w-full"
                 />
               </div>
-  
+
               <button
                 type="submit"
                 className="bg-red-700 text-white px-4 py-2 rounded hover:bg-yellow-700"
@@ -359,4 +361,4 @@ useEffect(() => {
       )}
     </div>
   );
-}  
+}
