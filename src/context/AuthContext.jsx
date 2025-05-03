@@ -9,52 +9,45 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-  
+    const token = localStorage.getItem("token"); // ✅ Solo localStorage
+
     if (!token) {
       setIsLoading(false);
       return;
     }
-  
+
     try {
-      jwtDecode(token); // Validamos token
+      jwtDecode(token); // valida el token
+
       fetch(api("/me"), {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       })
         .then(res => res.json())
         .then(data => {
           if (data.success) {
             setUser({
               ...data.user,
-              token, // 👈🏼 Guarda el token también
+              token, // ✅ guardamos token en estado
             });
           } else {
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('token');
+            localStorage.removeItem("token");
           }
         })
         .catch(() => {
-          localStorage.removeItem('token');
-          sessionStorage.removeItem('token');
+          localStorage.removeItem("token");
         })
         .finally(() => {
           setIsLoading(false);
         });
     } catch {
-      localStorage.removeItem('token');
-      sessionStorage.removeItem('token');
+      localStorage.removeItem("token");
       setIsLoading(false);
     }
   }, []);
-  
 
-  const login = (token, remember) => {
-    if (remember) {
-      localStorage.setItem("token", token);
-    } else {
-      sessionStorage.setItem("token", token);
-    }
-  
+  const login = (token) => {
+    localStorage.setItem("token", token); // ✅ siempre guarda en localStorage
+
     return fetch(api("/me"), {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -65,18 +58,16 @@ export const AuthProvider = ({ children }) => {
         if (data.success) {
           setUser({
             ...data.user,
-            token, // 👈🏼 Aca agregás el token al usuario
+            token,
           });
         }
       });
   };
-  
 
   const logout = () => {
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
+    localStorage.removeItem("token"); // ✅ ya no hace falta limpiar sessionStorage
     setUser(null);
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   const updateUser = (updatedFields) => {
