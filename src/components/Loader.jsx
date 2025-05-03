@@ -6,8 +6,9 @@ export default function Loader() {
       <img
         src="/imagenes/nino.png"
         alt="Cargando"
-        className="w-32 h-32 animate-bounce"
+        className="w-32 h-32 object-contain animate-bounce"
       />
+
       <p className="mt-4 text-red-600 font-bold text-lg tracking-wide">
         Cargando...
       </p>
