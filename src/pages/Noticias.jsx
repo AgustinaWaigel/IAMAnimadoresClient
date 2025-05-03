@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
 import { FileText, ImageIcon, File, Text, Trash2 } from "lucide-react";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -17,6 +18,7 @@ export default function Noticias() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tipoArchivoForm, setTipoArchivoForm] = useState("texto"); // 👈
+  const navigate = useNavigate();
 
   const cargarNoticias = async () => {
     try {
@@ -30,9 +32,12 @@ export default function Noticias() {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
+  if (user) {
     cargarNoticias();
-  }, []);
+  }
+}, [user]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

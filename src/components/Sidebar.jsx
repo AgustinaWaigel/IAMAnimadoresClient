@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react"; // Asegurate de tener lucide-react instalado
 import { useAuth } from "../context/AuthContext";
 
+
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <>
@@ -34,7 +35,10 @@ export default function Sidebar() {
         {/* Encabezado */}
         <div className="flex justify-between items-center px-4 py-4 border-b shadow-sm">
           <h2 className="text-2xl font-extrabold text-red-700">Menú</h2>
-          <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-red-700 transition">
+          <button
+            onClick={() => setOpen(false)}
+            className="text-gray-500 hover:text-red-700 transition"
+          >
             <X size={28} />
           </button>
         </div>
@@ -45,12 +49,26 @@ export default function Sidebar() {
           <NavLink to="/informacion" setOpen={setOpen} text="Información" />
           <NavLink to="/recursos" setOpen={setOpen} text="Encuentros" />
           <NavLink to="/calendario" setOpen={setOpen} text="Calendario" />
-          <NavLink to="/escuelaconjesus" setOpen={setOpen} text="Escuela con Jesús" />
+          <NavLink
+            to="/escuelaconjesus"
+            setOpen={setOpen}
+            text="Escuela con Jesús"
+          />
           <NavLink to="/dashboard" setOpen={setOpen} text="Muro" />
           <NavLink to="/areas" setOpen={setOpen} text="Áreas" />
-          <NavLink to="/noticias" setOpen={setOpen} text="Noticias y recursos" />
+          {isAuthenticated && (
+            <NavLink
+              to="/noticias"
+              setOpen={setOpen}
+              text="Noticias y recursos"
+            />
+          )}
           {user?.rol === "admin" && (
-            <NavLink to="/paneladministracion" setOpen={setOpen} text="Panel Administración" />
+            <NavLink
+              to="/paneladministracion"
+              setOpen={setOpen}
+              text="Panel Administración"
+            />
           )}
           {!user && (
             <p className="text-sm text-red-700 bg-red-100 p-3 rounded mt-4">
