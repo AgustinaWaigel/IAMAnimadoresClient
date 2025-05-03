@@ -4,7 +4,7 @@ export default function Loader() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
       <img
-        src="/gps.jpg"
+        src="/images/nino.png"
         alt="Cargando"
         className="w-32 h-32 animate-bounce"
       />
