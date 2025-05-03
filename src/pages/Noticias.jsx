@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import ModalNoticia from "../components/ModalNoticia";
 import { FileText, ImageIcon, File, Text, Trash2 } from "lucide-react";
+import Loader from "../components/Loader";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -176,7 +177,7 @@ export default function Noticias() {
       )}
 
       {loading ? (
-        <p className="text-center text-gray-500 animate-pulse">Cargando...</p>
+        <Loader />
       ) : (
         <>
           <SeccionNoticias

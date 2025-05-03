@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { Heart, HeartIcon, Search, Trash2, User } from "lucide-react";
 import { startOfWeek, endOfWeek, format } from "date-fns";
+import Loader from "./Loader";
 
 export default function DashboardPublicaciones() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -258,7 +259,7 @@ export default function DashboardPublicaciones() {
         </div>
 
         {loading ? (
-          <p className="text-center text-gray-500">Cargando publicaciones...</p>
+          <Loader />
         ) : postsFiltrados.length === 0 ? (
           <p className="text-center text-gray-700">
             No hay publicaciones que coincidan.
