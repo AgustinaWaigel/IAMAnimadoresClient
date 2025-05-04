@@ -18,7 +18,7 @@ export default function RecursosEdad() {
   const { user } = useAuth();
   const [archivos, setArchivos] = useState({});
   const [categoria, setCategoria] = useState(categorias[0]);
-  const [archivo, setArchivo] = useState(null);
+  const [archivo, setArchivo] = useState([]);
   const [objetivo, setObjetivo] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -62,7 +62,10 @@ export default function RecursosEdad() {
     if (!archivo) return alert("📎 Seleccioná un archivo");
 
     const formData = new FormData();
-    formData.append("archivo", archivo);
+    for (let i = 0; i < archivo.length; i++) {
+      formData.append("archivo", archivo[i]);
+    }
+    
     formData.append("edad", edad);
     formData.append("categoria", categoria);
     formData.append("objetivo", objetivo);
@@ -344,7 +347,8 @@ export default function RecursosEdad() {
                   key={fileKey}
                   type="file"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
-                  onChange={(e) => setArchivo(e.target.files[0])}
+                  multiple
+                  onChange={(e) => setArchivo(e.target.files)}
                   className="w-full"
                 />
               </div>
