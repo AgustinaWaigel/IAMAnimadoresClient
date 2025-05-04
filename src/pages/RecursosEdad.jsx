@@ -59,7 +59,10 @@ export default function RecursosEdad() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!archivo) return alert("📎 Seleccioná un archivo");
+    if (!archivo || archivo.length === 0) {
+      return alert("📎 Seleccioná al menos un archivo");
+    }
+    
 
     const formData = new FormData();
     for (let i = 0; i < archivo.length; i++) {
@@ -86,17 +89,20 @@ export default function RecursosEdad() {
 
       const data = await res.json();
       if (data.success) {
-        alert("✅ Recurso subido");
+        alert("✅ Recursos subidos");
         setObjetivo("");
         setArchivo(null);
         setFileKey(Date.now());
         setCategoria(categorias[0]);
-        setTipoArchivoForm("pdf"); // 👈 reiniciamos tipo
+        setTipoArchivoForm("pdf");
+      
         setArchivos((prev) => ({
           ...prev,
-          [categoria]: [...(prev[categoria] || []), data.recurso],
+          [categoria]: [...(prev[categoria] || []), ...(data.recursos || [])],
         }));
-      } else {
+      }
+      
+       else {
         alert("❌ " + data.message);
       }
     } catch (err) {
