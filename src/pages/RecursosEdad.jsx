@@ -91,20 +91,20 @@ export default function RecursosEdad() {
       if (data.success) {
         alert("✅ Recursos subidos");
         setObjetivo("");
-        setArchivo(null);
+        setArchivo([]);
         setFileKey(Date.now());
         setCategoria(categorias[0]);
         setTipoArchivoForm("pdf");
       
-        setArchivos((prev) => ({
-          ...prev,
-          [categoria]: [...(prev[categoria] || []), ...(data.recursos || [])],
-        }));
-      }
-      
-       else {
+        if (data.recursos && Array.isArray(data.recursos)) {
+          setArchivos((prev) => ({
+            ...prev,
+            [categoria]: [...(prev[categoria] || []), ...data.recursos],
+          }));
+        }
+      } else {
         alert("❌ " + data.message);
-      }
+      }      
     } catch (err) {
       alert("❌ Error al subir");
       console.error(err);
