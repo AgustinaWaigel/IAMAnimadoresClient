@@ -65,7 +65,7 @@ export default function RecursosEdad() {
     for (let i = 0; i < archivo.length; i++) {
       formData.append("archivo", archivo[i]);
     }
-    
+
     formData.append("edad", edad);
     formData.append("categoria", categoria);
     formData.append("objetivo", objetivo);
@@ -217,8 +217,9 @@ export default function RecursosEdad() {
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <h3 className="text-sm font-bold text-red-700 break-words line-clamp-2">
-                            {file.nombre}
+                            {decodeURIComponent(file.nombre)}
                           </h3>
+
                           <span
                             className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${
                               file.tipoArchivo === "imagen"
