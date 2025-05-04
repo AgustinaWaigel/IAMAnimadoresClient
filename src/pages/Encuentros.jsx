@@ -3,11 +3,10 @@ import { motion } from "framer-motion";
 
 export default function Recursos() {
   const edades = [
-    { id: "pequeños (3-4)", label: "Pequeños", colorClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-4 border-yellow-400"},
-    { id: "ninos (6-7-8)", label: "Niños", colorClass: "bg-green-100 text-green-800 hover:bg-green-200 border-4 border-green-400" },
-
-    { id: "preadolescentes (9-10-11-12)", label: "Preadolescentes", colorClass: "bg-blue-100 text-blue-800 hover:bg-blue-200 border-4 border-blue-400"},
-    { id: "adolescentes (13+)", label: "Adolescentes", colorClass: "bg-red-100 text-red-800 hover:bg-red-200 border-4 border-red-400"},
+    { id: "pequeños", label: "Pequeños (4-5)", colorClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-4 border-yellow-400"},
+    { id: "ninos", label: "Niños (6-7-8)", colorClass: "bg-green-100 text-green-800 hover:bg-green-200 border-4 border-green-400" },
+    { id: "preadolescentes", label: "Preadolescentes (9-10-11-12)", colorClass: "bg-blue-100 text-blue-800 hover:bg-blue-200 border-4 border-blue-400"},
+    { id: "adolescentes", label: "Adolescentes (13+)", colorClass: "bg-red-100 text-red-800 hover:bg-red-200 border-4 border-red-400"},
   ];
 
   return (
