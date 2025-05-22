@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import { usePush } from "./hooks/usePush";
+//import { usePush } from "./hooks/usePush";
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -45,9 +45,9 @@ function PrivateRoute({ children }) {
 export default function App() {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation(); // ✅ estaba faltando esto
-  const { solicitarPermiso } = usePush();
+  //const { solicitarPermiso } = usePush();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const registrarTokenNotificaciones = async () => {
       const token = await solicitarPermiso();
 
@@ -66,7 +66,7 @@ export default function App() {
     if (user?.token) {
       registrarTokenNotificaciones();
     }
-  }, [user]);
+  }, [user]);*/
 
   if (isLoading) return null;
 

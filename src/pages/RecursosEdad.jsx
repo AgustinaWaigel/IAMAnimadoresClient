@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
-import { Trash2, FileText, ImageIcon, Upload, Eye } from "lucide-react";
+import { Trash2, Eye, Upload } from "lucide-react";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const categorias = ["catequesis", "espiritualidad", "servicio", "comunion", "Otros recursos"];
 
@@ -20,6 +21,7 @@ export default function RecursosEdad() {
   const [tipoArchivoForm, setTipoArchivoForm] = useState("pdf");
   const [busqueda, setBusqueda] = useState("");
   const [categoriaFiltro, setCategoriaFiltro] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecursos = async () => {
@@ -28,7 +30,16 @@ export default function RecursosEdad() {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         const agrupados = {};
-        for (const cat of categorias) agrupados[cat] = data.filter((r) => r.categoria === cat);
+        for (const cat of categorias) {
+          const porCategoria = data.filter((r) => r.categoria === cat);
+          const porGrupo = porCategoria.reduce((acc, item) => {
+            const grupo = item.grupoId || item._id;
+            if (!acc[grupo]) acc[grupo] = [];
+            acc[grupo].push(item);
+            return acc;
+          }, {});
+          agrupados[cat] = porGrupo;
+        }
         setArchivos(agrupados);
       } catch (err) {
         console.error("❌ Error al cargar recursos:", err);
@@ -59,27 +70,34 @@ export default function RecursosEdad() {
         credentials: "include",
       });
       const data = await res.json();
-      if (data.success) {
+      if (data.success && Array.isArray(data.recursos)) {
         alert("✅ Recursos subidos");
         setObjetivo("");
         setArchivo([]);
         setFileKey(Date.now());
         setCategoria(categorias[0]);
         setTipoArchivoForm("pdf");
-        if (Array.isArray(data.recursos)) {
-          setArchivos((prev) => ({
-            ...prev,
-            [categoria]: [...(prev[categoria] || []), ...data.recursos],
-          }));
-        }
-      } else alert("❌ " + data.message);
+        setArchivos((prev) => {
+          const nuevos = { ...prev };
+          const nuevosPorGrupo = { ...nuevos[categoria] };
+          for (const recurso of data.recursos) {
+            const grupo = recurso.grupoId || recurso._id;
+            if (!nuevosPorGrupo[grupo]) nuevosPorGrupo[grupo] = [];
+            nuevosPorGrupo[grupo].push(recurso);
+          }
+          nuevos[categoria] = nuevosPorGrupo;
+          return nuevos;
+        });
+      } else {
+        alert("❌ " + data.message);
+      }
     } catch (err) {
       alert("❌ Error al subir");
       console.error(err);
     }
   };
 
-  const handleDelete = async (id, categoria) => {
+  const handleDelete = async (id, categoria, grupoId) => {
     if (!window.confirm("¿Estás seguro que querés borrar este recurso?")) return;
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recursos/${id}`, {
@@ -89,10 +107,18 @@ export default function RecursosEdad() {
       });
       const data = await res.json();
       if (data.success) {
-        setArchivos((prev) => ({
-          ...prev,
-          [categoria]: prev[categoria].filter((r) => r._id !== id),
-        }));
+        setArchivos((prev) => {
+          const copia = { ...prev };
+          const grupos = { ...copia[categoria] };
+          const recursos = grupos[grupoId]?.filter((r) => r._id !== id) || [];
+          if (recursos.length === 0) {
+            delete grupos[grupoId];
+          } else {
+            grupos[grupoId] = recursos;
+          }
+          copia[categoria] = grupos;
+          return copia;
+        });
         alert("✅ Recurso eliminado");
       } else alert("❌ No se pudo eliminar");
     } catch (err) {
@@ -102,11 +128,18 @@ export default function RecursosEdad() {
 
   const abrirArchivo = (file) => file.url && window.open(file.url, "_blank");
   if (isLoading) return <Loader />;
-
-  const noHayRecursos = !isLoading && Object.values(archivos).every((arr) => arr.length === 0);
+  const noHayRecursos = !isLoading && Object.values(archivos).every((cat) => Object.keys(cat).length === 0);
 
   return (
     <div className="mx-auto p-6 space-y-10">
+      <div className="mb-4">
+  <button
+    onClick={() => navigate(-1)}
+    className="text-sm text-red-600 underline hover:text-red-800"
+  >
+    ← Volver a la página anterior
+  </button>
+</div>
       <h1 className="text-3xl font-bold text-red-700 capitalize">Recursos para {edad}</h1>
       {noHayRecursos && <p className="text-center text-gray-400">No hay recursos disponibles para esta edad.</p>}
 
@@ -119,39 +152,48 @@ export default function RecursosEdad() {
         </select>
       </div>
 
-      {/* Listado */}
+      {/* Listado agrupado */}
       {categorias.filter((cat) => categoriaFiltro === "" || categoriaFiltro === cat).map((cat) => {
-        const filtrados = (archivos[cat] || []).filter((file) =>
-          file.objetivo?.toLowerCase().includes(busqueda.toLowerCase()) ||
-          file.nombre?.toLowerCase().includes(busqueda.toLowerCase())
+        const grupos = archivos[cat] || {};
+        const gruposFiltrados = Object.entries(grupos).filter(([_, recursos]) =>
+          recursos.some((file) =>
+            file.objetivo?.toLowerCase().includes(busqueda.toLowerCase()) ||
+            file.nombre?.toLowerCase().includes(busqueda.toLowerCase())
+          )
         );
-        if (filtrados.length === 0) return null;
+        if (gruposFiltrados.length === 0) return null;
 
         return (
           <div key={cat}>
             <h2 className="text-xl font-semibold text-red-700 capitalize mb-2">{cat}</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              {filtrados.map((file) => (
-                <motion.div key={file._id} whileHover={{ scale: 1.02 }} className="bg-gray-100 rounded-2xl shadow-lg border p-4 flex flex-col justify-between">
-                  {file.tipoArchivo === "imagen" && <img src={file.url} alt="" className="w-full object-cover" />}
-                  <div className="flex flex-col flex-grow justify-between mt-2">
+              {gruposFiltrados.map(([grupoId, recursos]) => {
+                const objetivoComun = recursos[0]?.objetivo || "Sin objetivo";
+                return (
+                  <motion.div key={grupoId} whileHover={{ scale: 1.02 }} className="bg-gray-100 rounded-2xl shadow-lg border p-4 flex flex-col gap-4">
                     <div>
-                      <h3 className="text-sm font-bold text-red-700 line-clamp-2">{decodeURIComponent(file.nombre)}</h3>
-                      {file.objetivo && <p className="text-gray-600 text-xs italic">🎯 {file.objetivo}</p>}
+                      <h3 className="text-sm text-red-700 font-semibold italic mb-2">🎯 {objetivoComun}</h3>
+                      <ul className="space-y-2">
+                        {recursos.map((file) => (
+                          <li key={file._id} className="flex flex-col gap-1 border-b pb-2">
+                            <span className="text-xs text-gray-500">{decodeURIComponent(file.nombre)}</span>
+                            <div className="flex gap-2 flex-wrap mt-1">
+                              <button onClick={() => abrirArchivo(file)} className="bg-gray-400 text-white text-sm rounded p-2 flex items-center gap-1">
+                                <Eye size={16} /> Ver {file.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
+                              </button>
+                              {user && (
+                                <button onClick={() => handleDelete(file._id, cat, grupoId)} className="bg-red-100 text-red-600 text-xs rounded-lg py-1 px-2 hover:bg-red-200 flex items-center gap-1">
+                                  <Trash2 size={16} /> Eliminar
+                                </button>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <div className="mt-4 flex flex-col gap-2">
-                      <button onClick={() => abrirArchivo(file)} className="bg-gray-400 text-white rounded p-2 flex justify-center items-center gap-1">
-                        <Eye size={16} /> Ver {file.tipoArchivo === "imagen" ? "Imagen" : "Archivo"}
-                      </button>
-                      {user && (
-                        <button onClick={() => handleDelete(file._id, cat)} className="bg-red-100 text-red-600 text-xs rounded-lg py-1 hover:bg-red-200 flex items-center justify-center gap-1">
-                          <Trash2 size={16} /> Eliminar
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         );
