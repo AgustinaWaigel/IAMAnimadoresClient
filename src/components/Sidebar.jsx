@@ -20,17 +20,15 @@ export default function Sidebar() {
 
       {/* Fondo oscuro */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
-          open ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40 transition-opacity duration-300 ${open ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         onClick={() => setOpen(false)}
       ></div>
 
       {/* Sidebar deslizante */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-white to-red-100 shadow-lg z-50 transform transition-transform duration-300 ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-white to-red-100 shadow-lg z-50 transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Encabezado */}
         <div className="flex justify-between items-center px-4 py-4 border-b shadow-sm">
@@ -49,6 +47,9 @@ export default function Sidebar() {
           <NavLink to="/informacion" setOpen={setOpen} text="Información" />
           <NavLink to="/recursos" setOpen={setOpen} text="Encuentros" />
           <NavLink to="/calendario" setOpen={setOpen} text="Calendario" />
+          {/*<NavLink to="/crear-noticia" setOpen={setOpen} text="Crear noticia de prueba" />
+          <NavLink to="/mostrar-noticias" setOpen={setOpen} text="Noticias de prueba" />*/}
+
           <NavLink
             to="/escuelaconjesus"
             setOpen={setOpen}

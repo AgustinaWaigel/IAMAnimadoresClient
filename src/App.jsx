@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import { usePush } from "./hooks/usePush";
+import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
+
+// Páginas
 import Home from "./pages/Home";
 import Login from "./features/auth/Login";
 import Register from "./features/auth/Register";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
-import "./index.css";
-import Navbar from "./components/Navbar";
-import { useAuth } from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import RecursosEdad from "./pages/RecursosEdad";
 import Recursos from "./pages/Encuentros";
@@ -26,19 +29,43 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Informacion from "./pages/Informacion";
 import FormatoEscuelaConJesus from "./pages/FormatoEscuelaConJesus";
-import ScrollToTop from "./components/ScrollToTop";
+import CrearNoticia from "./pages/CrearNoticia";
+import MostrarNoticia from "./pages/mostrarNoticia";
+import NoticiaDetalle from "./pages/noticiaDetalle";
+import "./index.css";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) return null; // o <Spinner /> si querés mostrar cargando
-
+  const location = useLocation();
+  if (isLoading) return null;
   return isAuthenticated ? children : <Navigate to="/login" />;
 }
 
 export default function App() {
-  const { isAuthenticated, isLoading } = useAuth();
-  const location = useLocation();
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const location = useLocation(); // ✅ estaba faltando esto
+  const { solicitarPermiso } = usePush();
+
+  useEffect(() => {
+    const registrarTokenNotificaciones = async () => {
+      const token = await solicitarPermiso();
+
+      if (token) {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ token }),
+        });
+      }
+    };
+
+    if (user?.token) {
+      registrarTokenNotificaciones();
+    }
+  }, [user]);
 
   if (isLoading) return null;
 
@@ -50,53 +77,36 @@ export default function App() {
       <Navbar />
 
       <main className="flex-grow">
-      <ScrollToTop />
-          <Routes>
-
-            <Route path="/" element={<Navigate to="/inicio" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/recuperar" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/calendario" element={<Calendario />} />
-            <Route path="/inicio" element={<Inicio />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/recursos/:edad" element={<RecursosEdad />} />
-            <Route path="/informacion" element={<Informacion />} />
-
-            <Route path="/areas" element={<Areas />} />
-
-            <Route path="/noticias" element={<Noticias />} />
-
-            <Route path="/comunicacion" element={<Comunicacion />} />
-
-            <Route path="/logistica" element={<Logistica />} />
-
-            <Route path="/formacion" element={<Formacion />} />
-
-            <Route path="/espiritualidad" element={<Espiritualidad />} />
-
-            <Route path="/animacion" element={<Animacion />} />
-
-            <Route
-              path="/formatoescuelaconjesus"
-              element={<FormatoEscuelaConJesus />}
-            />
-
-            <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
-
-            <Route
-              path="/paneladministracion"
-              element={<PanelAdministracion />}
-            />
-
-            <Route path="/recursos" element={<Recursos />} />
-            <Route path="*" element={<NotFound />} />
-            
-          </Routes>
-        
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Navigate to="/inicio" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/recuperar" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/calendario" element={<Calendario />} />
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/recursos/:edad" element={<RecursosEdad />} />
+          <Route path="/informacion" element={<Informacion />} />
+          <Route path="/areas" element={<Areas />} />
+          <Route path="/noticias" element={<Noticias />} />
+          <Route path="/comunicacion" element={<Comunicacion />} />
+          <Route path="/logistica" element={<Logistica />} />
+          <Route path="/formacion" element={<Formacion />} />
+          <Route path="/espiritualidad" element={<Espiritualidad />} />
+          <Route path="/animacion" element={<Animacion />} />
+          <Route path="/crear-noticia" element={<CrearNoticia />} />
+          <Route path="/mostrar-noticias" element={<MostrarNoticia />} />
+          <Route path="/mostrar-noticias/:slug" element={<NoticiaDetalle />} />
+          <Route path="/formatoescuelaconjesus" element={<FormatoEscuelaConJesus />} />
+          <Route path="/escuelaconjesus" element={<EscuelaConJesus />} />
+          <Route path="/paneladministracion" element={<PanelAdministracion />} />
+          <Route path="/recursos" element={<Recursos />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
 
       <footer className="mt-auto w-full py-4 text-center text-sm text-gray-500 border-t">
