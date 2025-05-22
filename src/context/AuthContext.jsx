@@ -9,7 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // ✅ Solo localStorage
+    const token = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user"); // 👈 también leemos el user
 
     if (!token) {
       setIsLoading(false);
@@ -17,8 +18,14 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      jwtDecode(token); // valida el token
+      jwtDecode(token); // valida formato del token
 
+      // Si hay user guardado, lo cargamos directamente
+      if (savedUser) {
+        setUser({ ...JSON.parse(savedUser), token });
+      }
+
+      // Igual consultamos al backend para confirmar que sigue siendo válido
       fetch(api("/me"), {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -27,26 +34,35 @@ export const AuthProvider = ({ children }) => {
           if (data.success) {
             setUser({
               ...data.user,
-              token, // ✅ guardamos token en estado
+              token,
             });
+            localStorage.setItem("user", JSON.stringify(data.user)); // 🔄 actualizamos user guardado
           } else {
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setUser(null);
           }
         })
         .catch(() => {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setUser(null);
         })
         .finally(() => {
           setIsLoading(false);
         });
+
     } catch {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
       setIsLoading(false);
     }
   }, []);
 
+
   const login = (token) => {
-    localStorage.setItem("token", token); // ✅ siempre guarda en localStorage
+    localStorage.setItem("token", token);
 
     return fetch(api("/me"), {
       headers: {
@@ -56,6 +72,7 @@ export const AuthProvider = ({ children }) => {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          localStorage.setItem("user", JSON.stringify(data.user)); // 👈 guarda user
           setUser({
             ...data.user,
             token,
@@ -63,6 +80,7 @@ export const AuthProvider = ({ children }) => {
         }
       });
   };
+
 
   const logout = () => {
     localStorage.removeItem("token"); // ✅ ya no hace falta limpiar sessionStorage
