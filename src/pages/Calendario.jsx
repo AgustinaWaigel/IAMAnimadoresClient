@@ -31,21 +31,21 @@ export default function Calendario() {
   useEffect(() => {
     const fetchEventos = async () => {
       setLoading(true); // <- al principio
-  
+
       try {
         const headers = user?.token
           ? { Authorization: `Bearer ${user.token}` }
           : {};
-  
+
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventos`, {
           headers,
         });
-  
+
         if (res.status === 401) {
           console.warn("Usuario no autorizado para ver eventos.");
           return;
         }
-  
+
         const data = await res.json();
         setEventos(
           data.map((e) => ({
@@ -60,10 +60,10 @@ export default function Calendario() {
         setLoading(false); // <- al final
       }
     };
-  
+
     fetchEventos();
   }, [user?.token]);
-  
+
 
   const handleCrearEvento = async (evento) => {
     if (!user?.token) {
@@ -189,17 +189,18 @@ export default function Calendario() {
           eventPropGetter={(event) => ({
             style: {
               backgroundColor: event.color || "#4f46e5",
-              borderRadius: "8px",
+              borderRadius: "6px",
               color: "#fff",
               border: `1px solid ${event.color || "#4f46e5"}`,
-              padding: "4px",
-              fontSize: "0.85rem",
-              fontWeight: "bold",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              padding: "2px 4px",
+              fontSize: "0.75rem",
+              fontWeight: "500",
+              whiteSpace: "normal",       // ✅ Permite salto de línea
+              lineHeight: "1.1rem",       // ✅ Más compacto
+              overflowWrap: "break-word", // ✅ Corta palabras si hace falta
             },
           })}
+
         />
         {!loading && eventos.length === 0 && (
           <p className="text-center text-gray-500 mt-4">
@@ -222,7 +223,19 @@ export default function Calendario() {
           isAdmin={user?.rol === "admin"}
           onClose={() => setMostrandoModal(false)}
           onDelete={handleDeleteEvento}
+          onUpdate={(eventoActualizado) => {
+            setEventos((prev) =>
+              prev.map((ev) =>
+                ev._id === eventoActualizado._id
+                  ? eventoActualizado
+                  : ev
+              )
+            );
+          }}
+
+
         />
+
       )}
     </div>
   );

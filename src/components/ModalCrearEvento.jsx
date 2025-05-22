@@ -52,29 +52,41 @@ export default function ModalCrearEvento({ onClose, onCrear }) {
             onChange={(e) => setDescripcion(e.target.value)}
             className="p-2 border rounded-md"
           />
-          <input
-            type="datetime-local"
-            value={fechaInicio}
-            onChange={(e) => setFechaInicio(e.target.value)}
-            className="p-2 border rounded-md"
-            required
-          />
-          <input
-            type="datetime-local"
-            value={fechaFin}
-            onChange={(e) => setFechaFin(e.target.value)}
-            className="p-2 border rounded-md"
-            required
-          />
-          <div className="flex items-center gap-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Inicio</label>
             <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="w-10 h-10 border rounded"
+              type="datetime-local"
+              value={fechaInicio}
+              onChange={(e) => setFechaInicio(e.target.value)}
+              className="p-2 border rounded-md w-full"
+              required
             />
-            <span className="text-sm text-gray-500">{color}</span>
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Fin</label>
+            <input
+              type="datetime-local"
+              value={fechaFin}
+              onChange={(e) => setFechaFin(e.target.value)}
+              className="p-2 border rounded-md w-full"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Seleccionar color</label>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-10 h-10 border rounded"
+              />
+              <span className="text-sm text-gray-600">{color}</span>
+            </div>
+          </div>
+
 
           <div className="flex justify-end gap-4">
             <button
