@@ -33,6 +33,7 @@ import CrearNoticia from "./pages/CrearNoticia";
 import MostrarNoticia from "./pages/mostrarNoticia";
 import NoticiaDetalle from "./pages/noticiaDetalle";
 import "./index.css";
+import ProbarNotificacion from "./pages/pruebanoti";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -106,6 +107,8 @@ export default function App() {
           <Route path="/paneladministracion" element={<PanelAdministracion />} />
           <Route path="/recursos" element={<Recursos />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/probar-notificacion" element={<ProbarNotificacion />} />
+
         </Routes>
       </main>
 
