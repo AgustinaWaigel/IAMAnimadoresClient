@@ -15,8 +15,9 @@ export const usePush = () => {
       }
 
       const token = await getToken(messaging, {
-        vapidKey: "TU_VAPID_KEY",
+        vapidKey: import.meta.env.VITE_VAPID_KEY
       });
+
 
       if (token) {
         console.log("✅ Token FCM:", token);
