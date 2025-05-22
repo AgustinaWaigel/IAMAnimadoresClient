@@ -12,14 +12,14 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("📩 Notificación recibida en segundo plano:", payload);
-
+  console.log("📩 Background Message:", payload); // 👈 importante
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
     icon: "/logo192.png",
-    data: payload.data, // ✅ pasás los datos para usar en notificationclick
+    data: payload.data,
   });
 });
+
 
 self.addEventListener("notificationclick", function(event) {
   event.notification.close();
