@@ -17,9 +17,9 @@ messaging.onBackgroundMessage((payload) => {
   const { title, body } = payload.notification || payload.data;
 
   self.registration.showNotification(title, {
-    body,
-    icon: "/logo192.png", // si tenés un ícono
-  });
+  body,
+  icon: "/logo192.png",
+  data: payload.data, // 👈 esto faltaba
 });
 
 self.addEventListener("notificationclick", function (event) {
@@ -34,4 +34,4 @@ self.addEventListener("notificationclick", function (event) {
       if (clients.openWindow) return clients.openWindow(link);
     })
   );
-});
+});})
