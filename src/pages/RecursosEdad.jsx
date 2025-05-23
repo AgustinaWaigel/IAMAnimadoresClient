@@ -166,7 +166,7 @@ export default function RecursosEdad() {
         return (
           <div key={cat}>
             <h2 className="text-xl font-semibold text-red-700 capitalize mb-2">{cat}</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2 items-start">
               {gruposFiltrados.map(([grupoId, recursos]) => {
                 const objetivoComun = recursos[0]?.objetivo || "Sin objetivo";
                 return (
