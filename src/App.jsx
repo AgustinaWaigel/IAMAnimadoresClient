@@ -34,6 +34,7 @@ import NoticiaDetalle from "./pages/noticiaDetalle";
 import "./index.css";
 import CrearNoticiaBloques from "./components/CrearNoticiaBloques";
 import EditarNoticiaBloques from "./components/EditarNoticiaBloques";
+import ProbarNotificacion from "./pages/ProbarNotificacion";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -47,7 +48,7 @@ export default function App() {
   const location = useLocation(); // ✅ estaba faltando esto
   //const { solicitarPermiso } = usePush();
 
-  /*useEffect(() => {
+  useEffect(() => {
     const registrarTokenNotificaciones = async () => {
       const token = await solicitarPermiso();
 
@@ -66,7 +67,7 @@ export default function App() {
     if (user?.token) {
       registrarTokenNotificaciones();
     }
-  }, [user]);*/
+  }, [user]);
 
   if (isLoading) return null;
 
@@ -108,6 +109,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/crear-noticia" element={<CrearNoticiaBloques />} />
           <Route path="/editar-noticia/:id" element={<EditarNoticiaBloques />} />
+          <Route path="/probar-notificacion" element={<ProbarNotificacion />} />
 
         </Routes>
       </main>
