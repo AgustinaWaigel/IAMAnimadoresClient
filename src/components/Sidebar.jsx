@@ -47,8 +47,8 @@ export default function Sidebar() {
           <NavLink to="/informacion" setOpen={setOpen} text="Información" />
           <NavLink to="/recursos" setOpen={setOpen} text="Encuentros" />
           <NavLink to="/calendario" setOpen={setOpen} text="Calendario" />
-          {/*<NavLink to="/crear-noticia" setOpen={setOpen} text="Crear noticia de prueba" />
-          <NavLink to="/mostrar-noticias" setOpen={setOpen} text="Noticias de prueba" />*/}
+          <NavLink to="/crear-noticia" setOpen={setOpen} text="Crear noticia de prueba" />
+          <NavLink to="/mostrar-noticias" setOpen={setOpen} text="Noticias" />
 
           <NavLink
             to="/escuelaconjesus"

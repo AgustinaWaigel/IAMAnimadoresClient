@@ -29,10 +29,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Informacion from "./pages/Informacion";
 import FormatoEscuelaConJesus from "./pages/FormatoEscuelaConJesus";
-import CrearNoticia from "./pages/CrearNoticia";
 import MostrarNoticia from "./pages/mostrarNoticia";
 import NoticiaDetalle from "./pages/noticiaDetalle";
 import "./index.css";
+import CrearNoticiaBloques from "./components/CrearNoticiaBloques";
+import EditarNoticiaBloques from "./components/EditarNoticiaBloques";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -98,7 +99,6 @@ export default function App() {
           <Route path="/formacion" element={<Formacion />} />
           <Route path="/espiritualidad" element={<Espiritualidad />} />
           <Route path="/animacion" element={<Animacion />} />
-          <Route path="/crear-noticia" element={<CrearNoticia />} />
           <Route path="/mostrar-noticias" element={<MostrarNoticia />} />
           <Route path="/mostrar-noticias/:slug" element={<NoticiaDetalle />} />
           <Route path="/formatoescuelaconjesus" element={<FormatoEscuelaConJesus />} />
@@ -106,6 +106,8 @@ export default function App() {
           <Route path="/paneladministracion" element={<PanelAdministracion />} />
           <Route path="/recursos" element={<Recursos />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/crear-noticia" element={<CrearNoticiaBloques />} />
+          <Route path="/editar-noticia/:id" element={<EditarNoticiaBloques />} />
 
         </Routes>
       </main>
