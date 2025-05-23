@@ -9,7 +9,7 @@ export default function ProbarNotificacion() {
   }, []);
 
   const enviarNotificacion = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/probar`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/notificacionesEvento/probar`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${user.token}`,
