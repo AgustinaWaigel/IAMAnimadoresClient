@@ -49,25 +49,26 @@ export default function App() {
   const { solicitarPermiso } = usePush();
 
   useEffect(() => {
-    const registrarTokenNotificaciones = async () => {
-      const token = await solicitarPermiso();
+  const registrarTokenNotificaciones = async () => {
+    const token = await solicitarPermiso();
 
-      if (token) {
-        await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/token`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    };
-
-    if (user?.token) {
-      registrarTokenNotificaciones();
+    if (token) {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ token }),
+      });
     }
-  }, [user]);
+  };
+
+  if (user?.token) {
+    registrarTokenNotificaciones();
+  }
+}, [user]);
+
 
   if (isLoading) return null;
 
