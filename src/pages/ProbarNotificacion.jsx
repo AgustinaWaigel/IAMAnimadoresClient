@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { usePush } from "../hooks/usePush";
 
 export default function ProbarNotificacion() {
   const { user } = useAuth();
@@ -8,7 +9,23 @@ export default function ProbarNotificacion() {
     document.title = "Probar notificación";
   }, []);
 
+  const { solicitarPermiso } = usePush();
+
   const enviarNotificacion = async () => {
+    const fcmToken = await solicitarPermiso();
+    if (!fcmToken) return alert("❌ No se pudo obtener el token de notificación");
+
+    // Guardar token en el backend
+    await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/guardar-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({ fcmToken }),
+    });
+
+    // Ahora sí, pedir que se envíe la notificación
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/probar`, {
       method: "POST",
       headers: {
@@ -17,12 +34,13 @@ export default function ProbarNotificacion() {
     });
 
     const data = await res.json();
-    if (data.success) {
+    if (data.ok) {
       alert("✅ Notificación enviada con éxito");
     } else {
       alert("❌ Error al enviar notificación");
     }
   };
+
 
   if (!user) return <p className="text-center mt-10">Cargando usuario...</p>;
 
