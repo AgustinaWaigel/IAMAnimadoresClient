@@ -99,7 +99,7 @@ useEffect(() => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        Noticias y Recursos
+        Avisos y Recursos
       </motion.h1>
 
       {user?.rol === "admin" && (
@@ -114,7 +114,7 @@ useEffect(() => {
                 : "bg-red-700 hover:bg-red-500 text-white"
             }`}
           >
-            {mostrarFormulario ? "Cancelar" : "Subir Noticia o Recurso"}
+            {mostrarFormulario ? "Cancelar" : "Subir Aviso o Recurso"}
           </motion.button>
 
           <AnimatePresence>
@@ -146,7 +146,7 @@ useEffect(() => {
                   onChange={(e) => setTipo(e.target.value)}
                   className="w-full border rounded p-2"
                 >
-                  <option value="noticia">Noticia</option>
+                  <option value="noticia">Aviso</option>
                   <option value="recurso">Recurso</option>
                 </select>
 
@@ -186,7 +186,7 @@ useEffect(() => {
       ) : (
         <>
           <SeccionNoticias
-            titulo="Últimas Noticias 🗞️"
+            titulo="Últimos Avisos 🗞️"
             noticias={noticiasFiltradas}
             setNoticiaSeleccionada={setNoticiaSeleccionada}
             user={user}
