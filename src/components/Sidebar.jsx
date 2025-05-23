@@ -61,7 +61,7 @@ export default function Sidebar() {
             <NavLink
               to="/noticias"
               setOpen={setOpen}
-              text="Noticias y recursos"
+              text="Avisos y recursos"
             />
           )}
           {user?.rol === "admin" && (
