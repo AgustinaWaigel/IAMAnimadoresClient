@@ -20,12 +20,12 @@ messaging.onBackgroundMessage((payload) => {
   });
 });
 
-self.addEventListener("notificationclick", function(event) {
+self.addEventListener("notificationclick", function (event) {
   event.notification.close();
   const link = event.notification.data?.link || "/";
 
   event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then(function(clientList) {
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (clientList) {
       for (const client of clientList) {
         if (client.url === link && "focus" in client) return client.focus();
       }
