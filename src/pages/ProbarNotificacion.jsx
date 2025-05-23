@@ -16,7 +16,7 @@ export default function ProbarNotificacion() {
     if (!fcmToken) return alert("❌ No se pudo obtener el token de notificación");
 
     // Guardar token en el backend
-    await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/guardar-token`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/guardar-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
