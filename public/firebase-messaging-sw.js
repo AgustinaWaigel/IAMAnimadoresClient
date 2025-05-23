@@ -12,11 +12,13 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("📩 Notificación en segundo plano:", payload); // 👈 esto
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: "/logo192.png",
-    data: payload.data,
+  console.log("📩 Mensaje en segundo plano", payload);
+
+  const { title, body } = payload.notification || payload.data;
+
+  self.registration.showNotification(title, {
+    body,
+    icon: "/logo192.png", // si tenés un ícono
   });
 });
 
