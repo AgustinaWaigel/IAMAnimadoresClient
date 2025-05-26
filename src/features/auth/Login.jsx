@@ -31,7 +31,7 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success) {
-        await login(data.token, rememberMe);
+        await login(data.token);
         navigate("/inicio");
       } else {
         setError(data.message);
