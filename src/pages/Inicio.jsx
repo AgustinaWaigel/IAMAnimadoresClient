@@ -67,7 +67,7 @@ const Inicio = () => {
             Recibí notificaciones de nuevas noticias y eventos directamente en tu celular.
           </p>
           <a
-            href="https://t.me/+qB8ddc6gVFdhY2Qx"
+            href="https://t.me/+yoll6FgPBwg4ZGVh"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-red-600 hover:bg-red-500 text-white px-5 py-3 rounded-lg font-semibold transition"
