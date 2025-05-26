@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useConfirm } from "../components/ConfirmProvider"; // agregá esto
 
 export default function NoticiaDetalle() {
   const { slug } = useParams();
@@ -13,12 +14,13 @@ export default function NoticiaDetalle() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const confirmar = useConfirm(); // instancialo
 
   const navigate = useNavigate();
 
   const handleEliminar = async () => {
-    const confirmar = window.confirm("¿Estás seguro que querés eliminar esta noticia?");
-    if (!confirmar) return;
+  const ok = await confirmar({ mensaje: "¿Estás seguro que querés eliminar esta noticia?" });
+  if (!ok) return;
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/crear-noticia/${noticia._id}`, {
@@ -38,6 +40,7 @@ export default function NoticiaDetalle() {
       alert("Error al conectar con el servidor");
     }
   };
+
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/crear-noticia/${slug}`)
@@ -120,17 +123,13 @@ export default function NoticiaDetalle() {
           </Link>
 
           <button
-            onClick={() => {
-              const confirmar = window.confirm("¿Estás seguro que querés eliminar esta noticia?");
-              if (!confirmar) return;
-
-              const segunda = window.confirm("⚠️ Esta acción no se puede deshacer. ¿Confirmás?");
-              if (segunda) handleEliminar();
-            }}
+            onClick={handleEliminar}
             className="flex items-center gap-2 text-sm text-red-600 border border-red-300 px-3 py-1.5 rounded hover:bg-red-50 transition"
           >
             <Trash2 size={16} /> Eliminar
           </button>
+
+
         </div>
 
 

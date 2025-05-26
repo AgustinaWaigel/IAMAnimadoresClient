@@ -35,6 +35,7 @@ import "./index.css";
 import CrearNoticiaBloques from "./components/CrearNoticiaBloques";
 import EditarNoticiaBloques from "./components/EditarNoticiaBloques";
 import ProbarNotificacion from "./pages/ProbarNotificacion";
+import { ConfirmProvider } from "./components/ConfirmProvider";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -77,7 +78,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white font-cute text-gray-700">
-      <Navbar />
+      <ConfirmProvider>
+        <Navbar />
 
       <main className="flex-grow">
         <ScrollToTop />
@@ -134,6 +136,7 @@ export default function App() {
           </a>
         </div>
       </footer>
+      </ConfirmProvider>
     </div>
   );
 }

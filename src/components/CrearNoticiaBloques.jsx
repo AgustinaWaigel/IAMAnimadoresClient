@@ -27,20 +27,44 @@ export default function CrearNoticiaBloques({ onSuccess }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!titulo.trim()) {
             setError("El título es obligatorio");
+            return;
+        }
+
+        if (!bloques.length) {
+            setError("La noticia debe tener al menos un bloque de contenido");
+            return;
+        }
+
+        const bloquesFiltrados = bloques.filter(
+            (bloque) => bloque.tipo !== "imagen" || bloque.contenido instanceof File
+        );
+
+        if (!bloquesFiltrados.length) {
+            setError("El contenido está vacío");
             return;
         }
 
         const data = new FormData();
         data.append("titulo", titulo);
         if (portada) data.append("portada", portada);
-        data.append("contenido", JSON.stringify(bloques));
+        data.append("contenido", JSON.stringify(bloquesFiltrados));
 
-        bloques.forEach((bloque) => {
+        bloquesFiltrados.forEach((bloque) => {
             if (bloque.tipo === "imagen" && bloque.contenido instanceof File) {
                 data.append("imagenes", bloque.contenido);
             }
+        });
+
+        console.log("🔍 ENVIANDO:", {
+            titulo,
+            portada,
+            bloques: bloquesFiltrados,
+            imagenesSubidas: bloquesFiltrados
+                .filter((b) => b.tipo === "imagen" && b.contenido instanceof File)
+                .map((f) => f.contenido.name),
         });
 
         try {
@@ -52,11 +76,16 @@ export default function CrearNoticiaBloques({ onSuccess }) {
             setBloques([]);
             if (onSuccess) onSuccess();
         } catch (err) {
-            console.error(err);
-            setError("❌ Error al subir la noticia");
+            console.error("Error completo:", err);
+            if (err.response?.data?.error) {
+                setError("❌ " + err.response.data.error);
+            } else {
+                setError("❌ Error desconocido al subir la noticia");
+            }
             setMensaje("");
         }
     };
+
 
     return (
         <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
