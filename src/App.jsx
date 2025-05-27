@@ -46,30 +46,7 @@ function PrivateRoute({ children }) {
 
 export default function App() {
   const { isAuthenticated, isLoading, user } = useAuth();
-  const location = useLocation(); // ✅ estaba faltando esto
-  const { solicitarPermiso } = usePush();
-
-  useEffect(() => {
-  const registrarTokenNotificaciones = async () => {
-    const token = await solicitarPermiso();
-
-    if (token) {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/notificaciones/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ token }),
-      });
-    }
-  };
-
-  if (user?.token) {
-    registrarTokenNotificaciones();
-  }
-}, [user]);
-
+  const location = useLocation();
 
   if (isLoading) return null;
 
