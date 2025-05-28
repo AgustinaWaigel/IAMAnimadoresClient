@@ -28,7 +28,6 @@ export default function ModalCrearEvento({ onClose, onCrear }) {
     setFechaInicio("");
     setFechaFin("");
     setColor("#2563eb");
-    onClose();
   };
 
   return (
