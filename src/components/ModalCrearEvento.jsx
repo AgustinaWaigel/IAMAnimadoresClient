@@ -14,11 +14,12 @@ export default function ModalCrearEvento({ onClose, onCrear }) {
       return;
     }
 
+    // ✅ Enviar strings (no new Date) para evitar desfases horarios
     onCrear({
       title: titulo,
       descripcion,
-      start: new Date(fechaInicio),
-      end: new Date(fechaFin),
+      start: fechaInicio,
+      end: fechaFin,
       color,
     });
 
@@ -85,7 +86,6 @@ export default function ModalCrearEvento({ onClose, onCrear }) {
               <span className="text-sm text-gray-600">{color}</span>
             </div>
           </div>
-
 
           <div className="flex justify-end gap-4">
             <button

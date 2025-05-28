@@ -10,10 +10,9 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export default function ModalEvento({ evento, onClose, onDelete, isAdmin, onUpdate}) {
+export default function ModalEvento({ evento, onClose, onDelete, isAdmin, onUpdate }) {
   if (!evento) return null;
 
-  // Ajuste horario local para inputs datetime-local
   const toLocalInput = (fecha) => {
     const d = new Date(fecha);
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -31,45 +30,44 @@ export default function ModalEvento({ evento, onClose, onDelete, isAdmin, onUpda
     format(new Date(fecha), "eeee d 'de' MMMM, HH:mm", { locale: es });
 
   const handleGuardar = async () => {
-  if (!titulo || !inicio || !fin) {
-    alert("Completá los campos requeridos.");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventos/${evento._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        title: titulo,
-        descripcion,
-        start: new Date(inicio),
-        end: new Date(fin),
-        color,
-      }),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      onUpdate?.({
-        ...data.evento,
-        start: new Date(data.evento.start),
-        end: new Date(data.evento.end),
-      });
-      alert("✅ Evento actualizado.");
-      onClose();
-    } else {
-      alert("❌ No se pudo actualizar.");
+    if (!titulo || !inicio || !fin) {
+      alert("Completá los campos requeridos.");
+      return;
     }
-  } catch (err) {
-    console.error("Error actualizando evento:", err);
-    alert("❌ Error al conectar con el servidor.");
-  }
-};
 
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventos/${evento._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          title: titulo,
+          descripcion,
+          start: inicio, // ⬅️ enviamos string
+          end: fin,
+          color,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        onUpdate?.({
+          ...data.evento,
+          start: new Date(data.evento.start),
+          end: new Date(data.evento.end),
+        });
+        alert("✅ Evento actualizado.");
+        onClose();
+      } else {
+        alert("❌ No se pudo actualizar.");
+      }
+    } catch (err) {
+      console.error("Error actualizando evento:", err);
+      alert("❌ Error al conectar con el servidor.");
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
