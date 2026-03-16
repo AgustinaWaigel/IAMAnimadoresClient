@@ -19,6 +19,11 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function Calendario() {
+  const googleCalendarId = import.meta.env.VITE_GOOGLE_CALENDAR_ID;
+  const googleCalendarTz =
+    import.meta.env.VITE_GOOGLE_CALENDAR_TZ || "America/Argentina/Buenos_Aires";
+  const googleCalendarIcsUrl = import.meta.env.VITE_GOOGLE_CALENDAR_ICS_URL;
+
   const [eventos, setEventos] = useState([]);
   const { user } = useAuth();
   const [vistaActual, setVistaActual] = useState<View>("month");
@@ -27,6 +32,54 @@ export default function Calendario() {
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
   const [mostrandoModal, setMostrandoModal] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  if (googleCalendarId) {
+    const encodedCalendarId = encodeURIComponent(googleCalendarId);
+    const embedUrl = `https://calendar.google.com/calendar/embed?src=${encodedCalendarId}&ctz=${encodeURIComponent(googleCalendarTz)}`;
+    const addToGoogleUrl = `https://calendar.google.com/calendar/u/0/r?cid=${encodedCalendarId}`;
+    const icsUrl =
+      googleCalendarIcsUrl ||
+      `https://calendar.google.com/calendar/ical/${encodedCalendarId}/public/basic.ics`;
+
+    return (
+      <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <h1 className="text-3xl text-red-700 font-mifuentepersonalizada">
+            Calendario
+          </h1>
+
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={addToGoogleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 transition"
+            >
+              Agregar a mi Google Calendar
+            </a>
+            <a
+              href={icsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white border border-red-300 text-red-700 px-4 py-2 rounded hover:bg-red-50 transition"
+            >
+              Exportar (.ics)
+            </a>
+          </div>
+        </div>
+
+        <div className="rounded-lg overflow-hidden shadow-lg border bg-white">
+          <iframe
+            src={embedUrl}
+            title="Calendario Google IAM"
+            className="w-full"
+            style={{ minHeight: "75vh", border: 0 }}
+            loading="lazy"
+          />
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const fetchEventos = async () => {
