@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Trash2, Eye, Upload } from "lucide-react";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
+import FloatingActionButton from "../components/FloatingActionButton";
+import { edadesRecursos } from "../data/edadesRecursos";
 
 const categorias = ["catequesis", "espiritualidad", "servicio", "comunion", "Otros recursos"];
 
@@ -22,6 +24,8 @@ export default function RecursosEdad() {
   const [busqueda, setBusqueda] = useState("");
   const [categoriaFiltro, setCategoriaFiltro] = useState("");
   const navigate = useNavigate();
+  const edadActual = edadesRecursos.find((e) => e.id === edad);
+  const edadLabel = edadActual?.label || edad || "";
 
   useEffect(() => {
     const fetchRecursos = async () => {
@@ -131,7 +135,7 @@ export default function RecursosEdad() {
   const noHayRecursos = !isLoading && Object.values(archivos).every((cat) => Object.keys(cat).length === 0);
 
   return (
-    <div className="mx-auto p-6 space-y-10">
+    <div className="mx-auto p-6 pb-28 space-y-10">
       <div className="mb-4">
   <button
     onClick={() => navigate(-1)}
@@ -140,7 +144,7 @@ export default function RecursosEdad() {
     ← Volver a la página anterior
   </button>
 </div>
-      <h1 className="text-3xl font-bold text-red-700 capitalize">Recursos para {edad}</h1>
+      <h1 className="text-3xl font-bold text-red-700">Recursos para {edadLabel}</h1>
       {noHayRecursos && <p className="text-center text-gray-400">No hay recursos disponibles para esta edad.</p>}
 
       {/* Filtros */}
@@ -202,12 +206,16 @@ export default function RecursosEdad() {
       {/* Formulario */}
       {!user ? <p className="text-center text-red-600 font-semibold mt-8">Iniciá sesión para subir recursos.</p> : (
         <>
+          <FloatingActionButton
+            open={mostrarFormulario}
+            onClick={() => setMostrarFormulario(!mostrarFormulario)}
+            labelOpen="Subir nuevo recurso"
+            labelClose="Cerrar formulario"
+            colorClassName="bg-red-600 hover:bg-red-700"
+            icon={<Upload className="w-5 h-5" />}
+          />
+
           <hr className="my-8" />
-          <div className="text-right">
-            <button onClick={() => setMostrarFormulario(!mostrarFormulario)} className="bg-gray-400 text-white font-semibold px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2">
-              <Upload className="w-5 h-5" /> {mostrarFormulario ? "Cerrar formulario" : "Subir nuevo recurso"}
-            </button>
-          </div>
 
           {mostrarFormulario && (
             <form onSubmit={handleUpload} className="bg-gray-100 p-4 rounded shadow space-y-4 mt-4">

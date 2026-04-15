@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { edadesRecursos } from "../data/edadesRecursos";
 
 export default function Recursos() {
-  const edades = [
-    { id: "pequeños", label: "Pequeños (4-5)", colorClass: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-4 border-yellow-400"},
-    { id: "ninos", label: "Niños (6-7-8)", colorClass: "bg-green-100 text-green-800 hover:bg-green-200 border-4 border-green-400" },
-    { id: "preadolescentes", label: "Preadolescentes (9-10-11-12)", colorClass: "bg-blue-100 text-blue-800 hover:bg-blue-200 border-4 border-blue-400"},
-    { id: "adolescentes", label: "Adolescentes (13+)", colorClass: "bg-red-100 text-red-800 hover:bg-red-200 border-4 border-red-400"},
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 via-white to-red-50 py-12 px-6 space-y-16">
       <motion.h1 
@@ -39,8 +33,8 @@ export default function Recursos() {
           Edades
         </motion.h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {edades.map((e, idx) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {edadesRecursos.map((e, idx) => (
             <motion.div
               key={e.id}
               whileHover={{ scale: 1.05 }}

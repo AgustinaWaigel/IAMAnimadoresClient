@@ -6,6 +6,8 @@ import PostCard from "../components/PostCard";
 import Insertar from "../components/Insertar";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import FloatingActionButton from "../components/FloatingActionButton";
+import { Upload } from "lucide-react";
 
 export default function Espiritualidad() {
   const { user } = useAuth();
@@ -59,7 +61,7 @@ export default function Espiritualidad() {
   };
 
   return (
-    <div className="mx-auto p-10 space-y-8 bg-white shadow-lg min-h-screen">
+    <div className="mx-auto p-10 pb-28 space-y-8 bg-white shadow-lg min-h-screen">
       <button
         onClick={() => navigate("/areas")}
         className="text-slate-400 hover:text-slate-600 font-semibold text-sm mb-6 flex items-center gap-2 "
@@ -86,19 +88,15 @@ export default function Espiritualidad() {
       </motion.p>
 
       {user?.rol === "admin" && (
-        <div className="text-center space-y-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <>
+          <FloatingActionButton
+            open={mostrarFormulario}
             onClick={() => setMostrarFormulario((prev) => !prev)}
-            className={`px-6 py-2 rounded-full font-semibold transition ${
-              mostrarFormulario
-                ? "bg-slate-300 hover:bg-slate-400 text-black"
-                : "bg-slate-300 hover:bg-slate-400 text-black"
-            }`}
-          >
-            {mostrarFormulario ? "Cancelar subida" : "Subir recurso"}
-          </motion.button>
+            labelOpen="Subir recurso"
+            labelClose="Cerrar formulario"
+            colorClassName="bg-slate-500 hover:bg-slate-600"
+            icon={<Upload size={18} />}
+          />
 
           <AnimatePresence>
             {mostrarFormulario && (
@@ -112,7 +110,7 @@ export default function Espiritualidad() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </>
       )}
 
       <hr className="border-gray-300" />
