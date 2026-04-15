@@ -1,0 +1,25 @@
+{
+  "name": "Animadores IAM",
+  "short_name": "IAM",
+  "description": "Aplicación de Animadores IAM instalada como PWA.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f4c430",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

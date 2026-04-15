@@ -28,6 +28,19 @@ export default function Login() {
         body: JSON.stringify({ username, password }),
       });
 
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok) {
+        const errorMessage = contentType.includes("application/json")
+          ? (await response.json())?.message
+          : await response.text();
+
+        throw new Error(errorMessage || `Error HTTP ${response.status}`);
+      }
+
+      if (!contentType.includes("application/json")) {
+        throw new Error("La API no devolvió JSON al iniciar sesión");
+      }
+
       const data = await response.json();
 
       if (data.success) {
@@ -38,7 +51,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error("❌ Error al iniciar sesión:", error);
-      setError("Error de conexión con el servidor");
+      setError(error instanceof Error ? error.message : "Error de conexión con el servidor");
     }
   };
 

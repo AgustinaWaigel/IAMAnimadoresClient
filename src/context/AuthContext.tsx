@@ -30,7 +30,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       fetch(api("/me"), {
         headers: { Authorization: `Bearer ${token}` },
       })
-        .then(res => res.json())
+        .then(async res => {
+          const contentType = res.headers.get("content-type") || "";
+
+          if (!res.ok) {
+            throw new Error(`Error HTTP ${res.status}`);
+          }
+
+          if (!contentType.includes("application/json")) {
+            throw new Error("La API no devolvió JSON al validar la sesión");
+          }
+
+          return res.json();
+        })
         .then(data => {
           if (data.success) {
             setUser({
@@ -70,7 +82,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(res => res.json())
+      .then(async res => {
+        const contentType = res.headers.get("content-type") || "";
+
+        if (!res.ok) {
+          throw new Error(`Error HTTP ${res.status}`);
+        }
+
+        if (!contentType.includes("application/json")) {
+          throw new Error("La API no devolvió JSON al validar la sesión");
+        }
+
+        return res.json();
+      })
       .then(data => {
         if (data.success) {
           localStorage.setItem("user", JSON.stringify(data.user)); // 👈 guarda user

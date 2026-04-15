@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { api } from "../lib/api";
 
 const Inicio = () => {
   const [eventos, setEventos] = useState([]);
@@ -8,7 +9,17 @@ const Inicio = () => {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventos`);
+        const res = await fetch(api("/eventos"));
+
+        if (!res.ok) {
+          throw new Error(`Error HTTP ${res.status} al cargar eventos`);
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("La API no devolvió JSON al cargar eventos");
+        }
+
         const data = await res.json();
 
         const hoy = new Date();
