@@ -1,33 +1,149 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { api } from "../lib/api";
+
+type EventoCalendario = {
+  title: string;
+  start: Date;
+};
+
+const descargarIcs = async (icsUrl: string): Promise<string> => {
+  const candidatos = [
+    icsUrl,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(icsUrl)}`,
+    `https://r.jina.ai/http://${icsUrl.replace(/^https?:\/\//, "")}`,
+  ];
+
+  let ultimoError: unknown = null;
+  for (const url of candidatos) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const texto = await res.text();
+      if (texto.includes("BEGIN:VCALENDAR")) {
+        return texto;
+      }
+      throw new Error("Contenido ICS inválido");
+    } catch (error) {
+      ultimoError = error;
+    }
+  }
+
+  throw ultimoError || new Error("No se pudo descargar el calendario ICS");
+};
+
+const normalizarLineasIcs = (icsRaw: string): string[] => {
+  const normalizado = icsRaw.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const lineas = normalizado.split("\n");
+  const desplegadas: string[] = [];
+
+  for (const linea of lineas) {
+    if (/^[ \t]/.test(linea) && desplegadas.length > 0) {
+      desplegadas[desplegadas.length - 1] += linea.trimStart();
+    } else {
+      desplegadas.push(linea);
+    }
+  }
+
+  return desplegadas;
+};
+
+const obtenerCampoIcs = (lineas: string[], campo: string): string | null => {
+  const linea = lineas.find(
+    (l) => l.startsWith(`${campo}:`) || l.startsWith(`${campo};`)
+  );
+  if (!linea) return null;
+  const indiceSeparador = linea.indexOf(":");
+  return indiceSeparador >= 0 ? linea.slice(indiceSeparador + 1).trim() : null;
+};
+
+const parsearFechaIcs = (valor: string | null): Date | null => {
+  if (!valor) return null;
+
+  if (/^\d{8}$/.test(valor)) {
+    const anio = Number(valor.slice(0, 4));
+    const mes = Number(valor.slice(4, 6)) - 1;
+    const dia = Number(valor.slice(6, 8));
+    return new Date(anio, mes, dia, 0, 0, 0, 0);
+  }
+
+  if (/^\d{8}T\d{6}Z$/.test(valor)) {
+    const anio = Number(valor.slice(0, 4));
+    const mes = Number(valor.slice(4, 6)) - 1;
+    const dia = Number(valor.slice(6, 8));
+    const hora = Number(valor.slice(9, 11));
+    const minuto = Number(valor.slice(11, 13));
+    const segundo = Number(valor.slice(13, 15));
+    return new Date(Date.UTC(anio, mes, dia, hora, minuto, segundo));
+  }
+
+  if (/^\d{8}T\d{6}$/.test(valor)) {
+    const anio = Number(valor.slice(0, 4));
+    const mes = Number(valor.slice(4, 6)) - 1;
+    const dia = Number(valor.slice(6, 8));
+    const hora = Number(valor.slice(9, 11));
+    const minuto = Number(valor.slice(11, 13));
+    const segundo = Number(valor.slice(13, 15));
+    return new Date(anio, mes, dia, hora, minuto, segundo);
+  }
+
+  const fecha = new Date(valor);
+  return Number.isNaN(fecha.getTime()) ? null : fecha;
+};
+
+const parsearEventosDesdeIcs = (icsRaw: string): EventoCalendario[] => {
+  const lineas = normalizarLineasIcs(icsRaw);
+  const contenido = lineas.join("\n");
+  const bloques = contenido
+    .split("BEGIN:VEVENT")
+    .slice(1)
+    .map((bloque) => bloque.split("END:VEVENT")[0]);
+
+  const eventos: EventoCalendario[] = [];
+  for (const bloque of bloques) {
+    const lineasEvento = bloque.split("\n");
+    const titulo = obtenerCampoIcs(lineasEvento, "SUMMARY") || "Sin título";
+    const inicioRaw = obtenerCampoIcs(lineasEvento, "DTSTART");
+    const inicio = parsearFechaIcs(inicioRaw);
+
+    if (inicio) {
+      eventos.push({ title: titulo, start: inicio });
+    }
+  }
+
+  return eventos;
+};
 
 const Inicio = () => {
-  const [eventos, setEventos] = useState([]);
+  const [eventos, setEventos] = useState<EventoCalendario[]>([]);
 
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const res = await fetch(api("/eventos"));
+        const googleCalendarIcsUrl = import.meta.env.VITE_GOOGLE_CALENDAR_ICS_URL;
+        const googleCalendarId = import.meta.env.VITE_GOOGLE_CALENDAR_ID;
 
-        if (!res.ok) {
-          throw new Error(`Error HTTP ${res.status} al cargar eventos`);
+        const icsUrl = googleCalendarIcsUrl
+          ? googleCalendarIcsUrl
+          : googleCalendarId
+            ? `https://calendar.google.com/calendar/ical/${encodeURIComponent(googleCalendarId)}/public/basic.ics`
+            : null;
+
+        if (!icsUrl) {
+          throw new Error("No hay configuración de Google Calendar para cargar eventos");
         }
 
-        const contentType = res.headers.get("content-type") || "";
-        if (!contentType.includes("application/json")) {
-          throw new Error("La API no devolvió JSON al cargar eventos");
-        }
-
-        const data = await res.json();
+        const icsRaw = await descargarIcs(icsUrl);
+        const data = parsearEventosDesdeIcs(icsRaw);
 
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
 
         const proximos = data
-          .filter((e: any) => new Date(e.start) >= hoy)
-          .sort((a: any, b: any) => new Date(a.start).getTime() - new Date(b.start).getTime())
+          .filter((e) => e.start >= hoy)
+          .sort((a, b) => a.start.getTime() - b.start.getTime())
           .slice(0, 10);
 
         setEventos(proximos);
@@ -40,7 +156,7 @@ const Inicio = () => {
   }, []);
 
   // Agrupar eventos por mes
-  const eventosAgrupados = eventos.reduce((acc: Record<string, any[]>, evento: any) => {
+  const eventosAgrupados = eventos.reduce((acc: Record<string, EventoCalendario[]>, evento) => {
     const fecha = new Date(evento.start);
     const key = fecha.toLocaleString("es-AR", { month: "long", year: "numeric" });
 
@@ -59,11 +175,11 @@ const Inicio = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          "Misioneros de esperanza, entre los pueblos"
+          "Unidos en cristo, unidos en la mision"
         </motion.h1>
 
         <motion.img
-          src="/logo-año-diocesano.webp"
+          src="/RECURSOS IAM (1).png"
           alt="Niña misionera"
           className="w-72 md:w-96"
           initial={{ opacity: 0, y: 30 }}
@@ -72,7 +188,7 @@ const Inicio = () => {
         />
       </div>
       {/* Sección de Telegram */}
-        <div className="flex-1 bg-white rounded-xl shadow-lg p-6 border border-yellow-300">
+        {/*<div className="flex-1 bg-white rounded-xl shadow-lg p-6 border border-yellow-300">
           <h2 className="text-2xl font-bold mb-4 text-red-600">📣 ¡Unite al grupo de Telegram!</h2>
           <p className="text-gray-700 mb-4">
             Recibí notificaciones de nuevas noticias y eventos directamente en tu celular.
@@ -85,7 +201,8 @@ const Inicio = () => {
           >
             Unirme al grupo
           </a>
-        </div>
+        </div>*/}
+
 
       <motion.h1
         className="text-4xl md:text-6xl font-extrabold mb-6 text-yellow-400 px-10 py-10"
