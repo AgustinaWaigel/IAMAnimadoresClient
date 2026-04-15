@@ -8,6 +8,7 @@ import CustomEvent from "../components/CustomEvent";
 import CustomToolbar from "../components/CustomToolbar";
 import ModalCrearEvento from "../components/ModalCrearEvento";
 import ModalEvento from "../components/ModalEvento";
+import { useConfirm } from "../components/ConfirmProvider";
 
 const locales = { es };
 const localizer = dateFnsLocalizer({
@@ -32,6 +33,7 @@ export default function Calendario() {
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
   const [mostrandoModal, setMostrandoModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const confirmar = useConfirm();
 
   if (googleCalendarId) {
     const encodedCalendarId = encodeURIComponent(googleCalendarId);
@@ -167,7 +169,7 @@ export default function Calendario() {
       return;
     }
 
-    const confirmacion = window.confirm("¿Eliminar este evento?");
+    const confirmacion = await confirmar({ mensaje: "¿Eliminar este evento?" });
     if (!confirmacion) return;
 
     try {

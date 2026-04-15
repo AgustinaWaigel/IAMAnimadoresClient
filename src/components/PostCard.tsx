@@ -2,15 +2,18 @@ import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { Trash2, FileText, ImageIcon, Eye, Calendar, Text } from "lucide-react";
 import type { Post } from "../types";
+import { useConfirm } from "./ConfirmProvider";
 
 export default function PostCard({ post, onDelete }: { post: Post; onDelete: (id: string) => void }) {
   const { user } = useAuth();
+  const confirmar = useConfirm();
   const userId = user?._id || user?.id;
 
   const { archivo: archivoUrl, tipoArchivo = "otro" } = post;
 
-  const handleDeleteConfirm = () => {
-    if (window.confirm("¿Seguro que querés eliminar este archivo? 🗑️")) {
+  const handleDeleteConfirm = async () => {
+    const confirmacion = await confirmar({ mensaje: "¿Seguro que querés eliminar este archivo? 🗑️" });
+    if (confirmacion) {
       onDelete(post._id);
     }
   };

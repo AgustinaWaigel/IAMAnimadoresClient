@@ -6,9 +6,11 @@ import { Heart, HeartIcon, Search, Trash2, User, Plus, X, Image as ImageIcon, Fi
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import Loader from "./Loader";
+import { useConfirm } from "./ConfirmProvider";
 
 export default function DashboardPublicaciones() {
   const { user } = useAuth();
+  const confirmar = useConfirm();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -86,7 +88,8 @@ export default function DashboardPublicaciones() {
   };
 
   const handleEliminar = async (postId) => {
-    if (!window.confirm("¿Seguro que querés eliminar esta publicación?")) return;
+    const confirmacion = await confirmar({ mensaje: "¿Seguro que querés eliminar esta publicación?" });
+    if (!confirmacion) return;
     try {
       const res = await fetch(api(`/muro/${postId}`), {
         method: "DELETE",

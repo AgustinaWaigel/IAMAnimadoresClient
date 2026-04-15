@@ -6,6 +6,7 @@ import ModalNoticia from "../components/ModalNoticia";
 import { FileText, ImageIcon, File, Text, Trash2 } from "lucide-react";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
+import { useConfirm } from "../components/ConfirmProvider";
 
 export default function Noticias() {
   const { user } = useAuth();
@@ -247,6 +248,7 @@ function SeccionNoticias({ titulo, noticias, setNoticiaSeleccionada, onDelete, u
 }
 
 function NoticiaCard({ noticia, onClick, onDelete, user }) {
+  const confirmar = useConfirm();
   const esImagen = noticia.tipoArchivo === "imagen";
   const esArchivo =
     noticia.tipoArchivo === "pdf" || noticia.tipoArchivo === "documento";
@@ -294,9 +296,10 @@ function NoticiaCard({ noticia, onClick, onDelete, user }) {
   {/* Acciones admin */}
   {user?.rol === "admin" && (
     <button
-      onClick={(e) => {
+      onClick={async (e) => {
         e.stopPropagation();
-        if (confirm("¿Estás seguro de que querés eliminar esta publicación?")) {
+        const confirmacion = await confirmar({ mensaje: "¿Estás seguro de que querés eliminar esta publicación?" });
+        if (confirmacion) {
           onDelete(noticia._id);
         }
       }}

@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { edadesRecursos } from "../data/edadesRecursos";
+import { useConfirm } from "../components/ConfirmProvider";
 
 const categorias = ["catequesis", "espiritualidad", "servicio", "comunion", "Otros recursos"];
 
@@ -24,6 +25,7 @@ export default function RecursosEdad() {
   const [busqueda, setBusqueda] = useState("");
   const [categoriaFiltro, setCategoriaFiltro] = useState("");
   const navigate = useNavigate();
+  const confirmar = useConfirm();
   const edadActual = edadesRecursos.find((e) => e.id === edad);
   const edadLabel = edadActual?.label || edad || "";
 
@@ -102,7 +104,8 @@ export default function RecursosEdad() {
   };
 
   const handleDelete = async (id, categoria, grupoId) => {
-    if (!window.confirm("¿Estás seguro que querés borrar este recurso?")) return;
+    const confirmacion = await confirmar({ mensaje: "¿Estás seguro que querés borrar este recurso?" });
+    if (!confirmacion) return;
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recursos/${id}`, {
         method: "DELETE",

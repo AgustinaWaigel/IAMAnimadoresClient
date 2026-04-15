@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 import type { Post } from "../../types";
+import { useConfirm } from "../../components/ConfirmProvider";
 
 export default function PostList({ posts, setPosts }: {
   posts: Post[];
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
 }) {
+  const confirmar = useConfirm();
   // 💥 Esta función va FUERA del useEffect
   const handleDelete = async (postId) => {
     const token = localStorage.getItem("token");
   
-    const confirm = window.confirm("¿Estás seguro que querés eliminar este post?");
-    if (!confirm) return;
+    const confirmacion = await confirmar({ mensaje: "¿Estás seguro que querés eliminar este post?" });
+    if (!confirmacion) return;
   
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {

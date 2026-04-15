@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { api } from "../lib/api";
 import { Pencil, Trash2 } from "lucide-react";
 import type { Noticia, User } from "../types";
+import { useConfirm } from "./ConfirmProvider";
 
 interface ModalNoticiaProps {
   noticia: Noticia;
@@ -20,6 +21,7 @@ export default function ModalNoticia({
   onUpdate,
 }: ModalNoticiaProps) {
   if (!noticia) return null;
+  const confirmar = useConfirm();
 
   const esImagen = noticia.archivoUrl?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
   const esPDF = noticia.archivoUrl?.match(/\.pdf$/i);
@@ -145,8 +147,9 @@ export default function ModalNoticia({
                   <Pencil size={20} />
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm("¿Eliminar esta noticia?")) onDelete(noticiaActual._id);
+                  onClick={async () => {
+                    const confirmacion = await confirmar({ mensaje: "¿Eliminar esta noticia?" });
+                    if (confirmacion) onDelete(noticiaActual._id);
                   }}
                   className="text-gray-600 hover:text-red-600"
                   title="Eliminar"

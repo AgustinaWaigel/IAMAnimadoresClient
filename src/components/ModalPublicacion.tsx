@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
+import { useConfirm } from './ConfirmProvider';
 import type { MuroPost } from '../types';
 
 interface ModalPublicacionProps {
@@ -13,6 +14,7 @@ interface ModalPublicacionProps {
 
 export default function ModalPublicacion({ post, onClose, onUpdate, onDelete }: ModalPublicacionProps) {
   const { user } = useAuth();
+  const confirmar = useConfirm();
   const [editando, setEditando] = useState(false);
   const [contenido, setContenido] = useState(post.contenido);
   const [categoria, setCategoria] = useState(post.categoria);
@@ -47,7 +49,8 @@ export default function ModalPublicacion({ post, onClose, onUpdate, onDelete }: 
   
 
   const handleDelete = async () => {
-    if (confirm('¿Seguro que querés eliminar esta publicación?')) {
+    const confirmacion = await confirmar({ mensaje: "¿Seguro que querés eliminar esta publicación?" });
+    if (confirmacion) {
       await onDelete(post._id);
       onClose();
     }
